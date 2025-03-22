@@ -1,7 +1,6 @@
-// main.js
-import { app, BrowserWindow, ipcMain } from 'electron';
-import url from 'url';
-import path from 'path';
+const { app, BrowserWindow, ipcMain } = require('electron');
+const url = require('url');
+const path = require('path');
 
 // Error Handling
 process.on('uncaughtException', error => {
