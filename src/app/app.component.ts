@@ -16,7 +16,7 @@ declare global {
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  title = 'wled-desktop';
+  title = 'WLED';
   sendMessage() {
     window.electronAPI.sendMessage('Hello from Angular!');
   }
