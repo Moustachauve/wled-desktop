@@ -1,0 +1,20 @@
+<mat-card appearance="raised" class="mat-elevation-z0" [ngClass]="{ selected: device.address === '192.168.1.101' }">
+  <mat-card-content>
+    <mat-card-header class="flex-container">
+      <div class="title-row">
+        <mat-card-title>{{ device.name }}</mat-card-title>
+        <mat-card-subtitle
+          >{{ device.address }} <mat-icon aria-hidden="false" aria-label="Wifi Status" fontIcon="network_wifi_3_bar"></mat-icon
+        ></mat-card-subtitle>
+      </div>
+      <div>
+        <mat-slide-toggle checked="{{ device.isPoweredOn }}" hideIcon="true"></mat-slide-toggle>
+      </div>
+    </mat-card-header>
+    <mat-card-actions>
+      <mat-slider min="0" max="255" step="1" discrete>
+        <input matSliderThumb value="{{ device.brightness }}" />
+      </mat-slider>
+    </mat-card-actions>
+  </mat-card-content>
+</mat-card>

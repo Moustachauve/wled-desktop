@@ -1,0 +1,37 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav
+    #drawer
+    class="sidenav"
+    fixedInViewport
+    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [opened]="(isHandset$ | async) === false">
+    <mat-toolbar>Menu</mat-toolbar>
+    <mat-nav-list>
+      <a mat-list-item href="#">Link 1</a>
+      <a mat-list-item href="#">Link 2</a>
+      <a mat-list-item href="#">Link 3</a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      @if (isHandset$ | async) {
+        <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()">
+          <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+        </button>
+      }
+      <span>wled-desktop</span>
+    </mat-toolbar>
+    <mat-list>
+      @for (device of allDevices; track device.name) {
+        <!-- Having 4 lines or more seem to just disable the height limit,so 5
+         is a nice number-->
+        <mat-list-item style="width: 500px" lines="5">
+          <app-device-list-item [device]="device"></app-device-list-item>
+        </mat-list-item>
+      } @empty {
+        <div>Booooh!</div>
+      }
+    </mat-list>
+  </mat-sidenav-content>
+</mat-sidenav-container>

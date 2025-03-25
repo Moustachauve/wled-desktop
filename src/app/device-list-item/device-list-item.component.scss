@@ -1,0 +1,38 @@
+mat-slider {
+  width: 100%;
+}
+
+mat-slide-toggle {
+  float: right;
+}
+
+mat-card {
+  cursor: pointer;
+  background-color: var(--mat-sys-surface);
+
+  &:hover {
+    background-color: var(--mdc-elevated-card-container-color, var(--mat-sys-surface-container-low));
+  }
+
+  &.selected {
+    background-color: var(--mat-sys-primary-container);
+  }
+}
+
+.flex-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title-row {
+  flex: 1;
+}
+
+.mat-mdc-card-content:first-child {
+  padding-top: 0;
+}
+
+.mat-mdc-card-content:last-child {
+  padding-bottom: 0;
+}
