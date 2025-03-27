@@ -1,5 +1,5 @@
 <mat-list>
-  @for (device of (allDevices$ | async) ?? []; track device.name) {
+  @for (device of allDevices; track device.name) {
     <!-- Having 4 lines or more seem to just disable the height limit,so 5
      is a nice number-->
     <mat-list-item style="width: 500px" lines="5">
