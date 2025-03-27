@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatIconModule } from '@angular/material/icon';
-import { Device } from '../../lib/device';
+import { Device } from '../../lib/database/device';
 
 @Component({
   selector: 'app-device-list-item',
@@ -18,7 +18,5 @@ export class DeviceListItemComponent {
     name: 'empty',
     macAddress: '',
     address: '',
-    brightness: 0,
-    isPoweredOn: false,
   };
 }

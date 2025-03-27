@@ -8,12 +8,12 @@
         ></mat-card-subtitle>
       </div>
       <div>
-        <mat-slide-toggle checked="{{ device.isPoweredOn }}" hideIcon="true"></mat-slide-toggle>
+        <mat-slide-toggle checked="true" hideIcon="true"></mat-slide-toggle>
       </div>
     </mat-card-header>
     <mat-card-actions>
       <mat-slider min="0" max="255" step="1" discrete>
-        <input matSliderThumb value="{{ device.brightness }}" />
+        <input matSliderThumb value="125" />
       </mat-slider>
     </mat-card-actions>
   </mat-card-content>

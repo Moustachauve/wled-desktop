@@ -8,8 +8,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import { DeviceListItemComponent } from '../device-list-item/device-list-item.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { DeviceListDetailsComponent } from '../device-list-details/device-list-details.component';
 
 @Component({
   selector: 'app-navigation',
@@ -22,8 +22,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     MatListModule,
     MatIconModule,
     AsyncPipe,
-    DeviceListItemComponent,
     MatSlideToggleModule,
+    DeviceListDetailsComponent,
   ],
 })
 export class NavigationComponent {
@@ -33,21 +33,4 @@ export class NavigationComponent {
     map(result => result.matches),
     shareReplay()
   );
-
-  device1 = {
-    name: 'First WLED',
-    address: '192.168.1.101',
-    macAddress: '00:00:00:00:00:00',
-    isPoweredOn: false,
-    brightness: 128,
-  };
-  device2 = {
-    name: 'WLED Second',
-    address: '192.168.1.102',
-    macAddress: '11:11:11:11:11:11',
-    isPoweredOn: true,
-    brightness: 10,
-  };
-
-  allDevices = [this.device1, this.device2];
 }

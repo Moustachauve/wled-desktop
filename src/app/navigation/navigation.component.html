@@ -22,16 +22,7 @@
       }
       <span>wled-desktop</span>
     </mat-toolbar>
-    <mat-list>
-      @for (device of allDevices; track device.name) {
-        <!-- Having 4 lines or more seem to just disable the height limit,so 5
-         is a nice number-->
-        <mat-list-item style="width: 500px" lines="5">
-          <app-device-list-item [device]="device"></app-device-list-item>
-        </mat-list-item>
-      } @empty {
-        <div>Booooh!</div>
-      }
-    </mat-list>
+
+    <app-device-list-details></app-device-list-details>
   </mat-sidenav-content>
 </mat-sidenav-container>
