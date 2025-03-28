@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
 import { DeviceListItemComponent } from '../device-list-item/device-list-item.component';
-import { DeviceService } from '../device.service';
+import { DeviceService, DeviceWithState } from '../device.service';
 import { Device } from '../../lib/database/device';
 
 @Component({
@@ -17,9 +17,11 @@ export class DeviceListDetailsComponent implements OnInit {
     this.getDevices();
   }
 
-  allDevices: Device[] = [];
+  devicesWithState: DeviceWithState[] = [];
 
   getDevices() {
-    this.deviceService.getDevices().subscribe(devices => (this.allDevices = devices));
+    this.deviceService.devicesWithState$.subscribe(devicesWithState => {
+      this.devicesWithState = devicesWithState;
+    });
   }
 }

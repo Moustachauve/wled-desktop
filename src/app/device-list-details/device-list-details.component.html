@@ -1,9 +1,9 @@
 <mat-list>
-  @for (device of allDevices; track device.name) {
+  @for (deviceWithState of devicesWithState; track deviceWithState.device.macAddress) {
     <!-- Having 4 lines or more seem to just disable the height limit,so 5
      is a nice number-->
     <mat-list-item style="width: 500px" lines="5">
-      <app-device-list-item [device]="device"></app-device-list-item>
+      <app-device-list-item [deviceWithState]="deviceWithState"></app-device-list-item>
     </mat-list-item>
   } @empty {
     <div>No device found.</div>
