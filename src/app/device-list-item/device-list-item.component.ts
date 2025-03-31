@@ -15,4 +15,5 @@ import { DeviceWithState } from '../device.service';
 })
 export class DeviceListItemComponent {
   @Input() deviceWithState: DeviceWithState = {} as DeviceWithState;
+  @Input() isSelected = false;
 }

@@ -4,7 +4,10 @@
       <!-- Having 4 lines or more seem to just disable the height limit,so 5
      is a nice number-->
       <mat-list-item style="width: 500px" lines="5">
-        <app-device-list-item [deviceWithState]="deviceWithState" (click)="setSelectedDevice(deviceWithState)"></app-device-list-item>
+        <app-device-list-item
+          [deviceWithState]="deviceWithState"
+          (click)="setSelectedDevice(deviceWithState)"
+          [isSelected]="deviceWithState.device.macAddress === selectedDeviceWithState?.device?.macAddress"></app-device-list-item>
       </mat-list-item>
     } @empty {
       <div>No device found.</div>
