@@ -1,28 +1,31 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav
-    #drawer
-    class="sidenav"
-    fixedInViewport
-    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-    [mode]="(isHandset$ | async) ? 'over' : 'side'"
-    [opened]="(isHandset$ | async) === false">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport>
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item (click)="openAddDeviceDialog()">Add new device</a>
+      <a mat-list-item (click)="openAddDeviceDialog()" [routerLink]="[]">Add new device</a>
       <a mat-list-item href="#">Link 2</a>
       <a mat-list-item href="#">Link 3</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-    <mat-toolbar color="primary">
-      @if (isHandset$ | async) {
-        <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()">
-          <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-        </button>
-      }
-      <span>wled-desktop</span>
-    </mat-toolbar>
-
-    <app-device-list-details></app-device-list-details>
+    <div class="two-pane">
+      <div>
+        <mat-toolbar color="primary">
+          <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()">
+            <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+          </button>
+          <span>wled-desktop</span>
+          <div class="end-actions">
+            <button type="button" aria-label="Add device" mat-icon-button (click)="openAddDeviceDialog()">
+              <mat-icon aria-label="Side nav toggle icon">add</mat-icon>
+            </button>
+          </div>
+        </mat-toolbar>
+        <app-device-list (deviceSelected)="setSelectedDevice($event)"></app-device-list>
+      </div>
+      <div>
+        <app-device-details [deviceWithState]="selectedDeviceWithState"></app-device-details>
+      </div>
+    </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

@@ -2,10 +2,11 @@
   <mat-card-content>
     <mat-card-header class="flex-container">
       <div class="title-row">
-        <mat-card-title>{{ deviceWithState.displayName() }} - Connected: {{ deviceWithState.isWebsocketConnected }}</mat-card-title>
+        <mat-card-title>{{ deviceWithState.displayName() }}</mat-card-title>
         <mat-card-subtitle
-          >{{ deviceWithState.device.address }} <mat-icon aria-hidden="false" aria-label="Wifi Status" fontIcon="network_wifi_3_bar"></mat-icon
-        ></mat-card-subtitle>
+          >{{ deviceWithState.device.address }} <mat-icon aria-hidden="false" aria-label="Wifi Status" fontIcon="network_wifi_3_bar"></mat-icon>-
+          Connected: {{ deviceWithState.isWebsocketConnected }}</mat-card-subtitle
+        >
       </div>
       <div>
         <mat-slide-toggle checked="{{ deviceWithState.stateInfo?.state?.isOn }}" hideIcon="true"></mat-slide-toggle>

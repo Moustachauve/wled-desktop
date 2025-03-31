@@ -14,4 +14,22 @@
   position: sticky;
   top: 0;
   z-index: 1;
+
+  .end-actions {
+    display: flex;
+    justify-content: flex-end;
+    flex: 1;
+  }
+}
+
+.two-pane {
+  display: flex;
+  height: 100%;
+  > :first-child {
+    flex: 0 1 400px;
+  }
+
+  > :last-child {
+    flex: 1 0 370px;
+  }
 }

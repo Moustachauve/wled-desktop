@@ -1,0 +1,10 @@
+<div class="container">
+  <mat-toolbar color="primary">
+    <span>Second toolbar</span>
+  </mat-toolbar>
+  @if (selectedDeviceAddress()) {
+    <iframe [src]="selectedDeviceAddress()"></iframe>
+  } @else {
+    <div>Select a device.</div>
+  }
+</div>

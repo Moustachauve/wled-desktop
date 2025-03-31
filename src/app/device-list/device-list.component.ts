@@ -1,20 +1,22 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, output } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { DeviceListItemComponent } from '../device-list-item/device-list-item.component';
 import { DeviceService, DeviceWithState } from '../device.service';
 
 @Component({
-  selector: 'app-device-list-details',
+  selector: 'app-device-list',
   imports: [MatListModule, DeviceListItemComponent, CommonModule],
-  templateUrl: './device-list-details.component.html',
-  styleUrl: './device-list-details.component.scss',
+  templateUrl: './device-list.component.html',
+  styleUrl: './device-list.component.scss',
 })
-export class DeviceListDetailsComponent implements OnInit {
+export class DeviceListComponent implements OnInit {
   devicesWithState: DeviceWithState[] = [];
   selectedDeviceWithState: DeviceWithState | null = null;
   selectedDeviceAddress: SafeResourceUrl | null = null;
+
+  deviceSelected = output<DeviceWithState>();
 
   constructor(
     private deviceService: DeviceService,
@@ -34,6 +36,7 @@ export class DeviceListDetailsComponent implements OnInit {
   setSelectedDevice(deviceWithState: DeviceWithState) {
     this.selectedDeviceWithState = deviceWithState;
     this.selectedDeviceAddress = this.sanitizer.bypassSecurityTrustResourceUrl('http://' + deviceWithState.device.address);
+    this.deviceSelected.emit(deviceWithState);
     console.log(this.selectedDeviceAddress);
   }
 }
