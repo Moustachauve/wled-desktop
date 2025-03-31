@@ -1,0 +1,39 @@
+import { Injectable } from '@angular/core';
+import { Device } from '../lib/database/device';
+import { HttpClient } from '@angular/common/http';
+import { DeviceStateInfo, Info, State } from '../lib/device-api-types';
+import { Observable, firstValueFrom } from 'rxjs';
+import { db } from '../lib/database/db';
+import { plainToInstance } from 'class-transformer';
+import { DeviceWithState } from './device.service';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class DeviceFirstContactService {
+  constructor(private http: HttpClient) {}
+
+  async tryCreateDevice(address: string): Promise<DeviceWithState> {
+    console.log(address, 'Trying to create a new device');
+    const plainInfo = await firstValueFrom(this.getDeviceInfo(address));
+    console.log(address, plainInfo);
+    const info = plainToInstance(Info, plainInfo);
+    console.log(address, plainInfo);
+    if (!info.macAddress) {
+      throw Error('No mac address returned');
+    }
+    const device: Device = {
+      macAddress: info.macAddress,
+      address: address,
+    };
+    db.devices.put(device);
+    console.log(address, 'Device created');
+    const deviceWithState = new DeviceWithState(device);
+    deviceWithState.stateInfo = plainToInstance(DeviceStateInfo, { info: plainInfo });
+    return deviceWithState;
+  }
+
+  private getDeviceInfo(address: string): Observable<Info> {
+    return this.http.get<Info>('http://' + address + '/json/info');
+  }
+}

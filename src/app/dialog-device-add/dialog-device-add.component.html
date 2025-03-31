@@ -1,0 +1,37 @@
+<h2 mat-dialog-title>Add a new device</h2>
+<mat-dialog-content>
+  @if (currentStep === AddStep.Form) {
+    <mat-error>{{ errorMessage }}</mat-error>
+    <form [formGroup]="deviceAddForm" (ngSubmit)="onSubmitAddDevice()" id="deviceAddForm">
+      <mat-form-field>
+        <mat-label>IP or address</mat-label>
+        <input matInput cdkFocusInitial formControlName="address" type="url" required />
+        @if (addressField?.hasError('required')) {
+          <mat-error>Address is required</mat-error>
+        }
+        @if (addressField?.hasError('invalidUrl')) {
+          <mat-error>Please enter a valid address</mat-error>
+        }
+      </mat-form-field>
+    </form>
+  } @else if (currentStep === AddStep.Adding) {
+    <div class="center">
+      <mat-spinner diameter="40"></mat-spinner>
+      <h3>Adding "{{ address }}"...</h3>
+    </div>
+  } @else if (currentStep === AddStep.Success) {
+    <div class="center">
+      <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="add_task" class="success"></mat-icon>
+      <h3>Success!</h3>
+      <div>{{ deviceWithState?.displayName() }} was added</div>
+    </div>
+  }
+</mat-dialog-content>
+<mat-dialog-actions>
+  @if (currentStep === AddStep.Form) {
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-flat-button [disabled]="deviceAddForm.invalid" form="deviceAddForm">Add</button>
+  } @else {
+    <button mat-button mat-dialog-close>Close</button>
+  }
+</mat-dialog-actions>

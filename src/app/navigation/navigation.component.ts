@@ -10,6 +10,8 @@ import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { DeviceListDetailsComponent } from '../device-list-details/device-list-details.component';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogDeviceAddComponent } from '../dialog-device-add/dialog-device-add.component';
 
 @Component({
   selector: 'app-navigation',
@@ -28,9 +30,14 @@ import { DeviceListDetailsComponent } from '../device-list-details/device-list-d
 })
 export class NavigationComponent {
   private breakpointObserver = inject(BreakpointObserver);
+  readonly dialog = inject(MatDialog);
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
     map(result => result.matches),
     shareReplay()
   );
+
+  openAddDeviceDialog() {
+    this.dialog.open(DialogDeviceAddComponent);
+  }
 }

@@ -14,11 +14,13 @@ export class AppDB extends Dexie {
   }
 
   async populate() {
+    /*
     await db.devices.add({
       macAddress: '11:22:33:44:55:66',
       address: '192.168.1.2',
       name: 'test WLED',
     });
+    */
   }
 }
 
