@@ -8,6 +8,12 @@ iframe {
   flex: 1;
   border: none;
   margin: 0 10px;
-  border-radius: var(--mdc-elevated-card-container-shape, var(--mat-sys-corner-medium));
-  box-shadow: var(--mdc-elevated-card-container-elevation, var(--mat-sys-level1));
+  border-radius: var(
+    --mdc-elevated-card-container-shape,
+    var(--mat-sys-corner-medium)
+  );
+  box-shadow: var(
+    --mdc-elevated-card-container-elevation,
+    var(--mat-sys-level1)
+  );
 }

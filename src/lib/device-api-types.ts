@@ -1,7 +1,9 @@
 import { Expose, Type, plainToInstance } from 'class-transformer';
 import 'reflect-metadata';
 
-export function ParseDeviceJsonState(jsonState: string): DeviceStateInfo | null {
+export function ParseDeviceJsonState(
+  jsonState: string
+): DeviceStateInfo | null {
   try {
     const json = JSON.parse(jsonState);
     return plainToInstance(DeviceStateInfo, json);

@@ -29,7 +29,9 @@ export class DeviceFirstContactService {
     db.devices.put(device);
     console.log(address, 'Device created');
     const deviceWithState = new DeviceWithState(device);
-    deviceWithState.stateInfo = plainToInstance(DeviceStateInfo, { info: plainInfo });
+    deviceWithState.stateInfo = plainToInstance(DeviceStateInfo, {
+      info: plainInfo,
+    });
     return deviceWithState;
   }
 

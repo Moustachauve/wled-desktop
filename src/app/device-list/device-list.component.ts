@@ -35,7 +35,9 @@ export class DeviceListComponent implements OnInit {
 
   setSelectedDevice(deviceWithState: DeviceWithState) {
     this.selectedDeviceWithState = deviceWithState;
-    this.selectedDeviceAddress = this.sanitizer.bypassSecurityTrustResourceUrl('http://' + deviceWithState.device.address);
+    this.selectedDeviceAddress = this.sanitizer.bypassSecurityTrustResourceUrl(
+      'http://' + deviceWithState.device.address
+    );
     this.deviceSelected.emit(deviceWithState);
     console.log(this.selectedDeviceAddress);
   }

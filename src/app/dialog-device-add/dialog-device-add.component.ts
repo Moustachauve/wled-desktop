@@ -1,7 +1,20 @@
 import { Component, inject } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
+import {
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -46,7 +59,10 @@ export class DialogDeviceAddComponent {
     return validUrl ? null : { invalidUrl: true };
   };
   deviceAddForm = new FormGroup({
-    address: new FormControl('', Validators.compose([Validators.required, this.urlValidator])),
+    address: new FormControl(
+      '',
+      Validators.compose([Validators.required, this.urlValidator])
+    ),
   });
   address = '';
   errorMessage = '';
@@ -85,7 +101,8 @@ export class DialogDeviceAddComponent {
     this.address = address;
     this.currentStep = AddStep.Adding;
     try {
-      this.deviceWithState = await this.deviceFirstContactService.tryCreateDevice(address);
+      this.deviceWithState =
+        await this.deviceFirstContactService.tryCreateDevice(address);
     } catch (error) {
       this.errorMessage = 'Could not add device.';
       console.error(error);

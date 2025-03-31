@@ -30,7 +30,8 @@ export class DeviceService implements OnDestroy {
   private devices$: DexieObservable<Device[]>;
   private devicesWithState: Record<string, DeviceWithState> = {};
   private devicesWithStateSubject = new Subject<DeviceWithState[]>();
-  devicesWithState$: Observable<DeviceWithState[]> = this.devicesWithStateSubject.asObservable();
+  devicesWithState$: Observable<DeviceWithState[]> =
+    this.devicesWithStateSubject.asObservable();
 
   constructor() {
     this.devices$ = liveQuery(() => db.devices.toArray());
@@ -80,7 +81,9 @@ export class DeviceService implements OnDestroy {
     const maxReconnectAttempts = 5; // Adjust as needed
     const reconnectDelay = 15000; // Adjust delay in milliseconds
 
-    console.log(`Initiating WebSocket connection for device ${device.macAddress}...`);
+    console.log(
+      `Initiating WebSocket connection for device ${device.macAddress}...`
+    );
 
     const connect = () => {
       ws = new WebSocket(websocketUrl);
@@ -101,8 +104,12 @@ export class DeviceService implements OnDestroy {
           this.websocketMessages[device.macAddress] = [];
         }
         this.websocketMessages[device.macAddress].push(message);
-        this.devicesWithState[device.macAddress].stateInfo = ParseDeviceJsonState(event.data);
-        console.log(device.macAddress, this.devicesWithState[device.macAddress].stateInfo);
+        this.devicesWithState[device.macAddress].stateInfo =
+          ParseDeviceJsonState(event.data);
+        console.log(
+          device.macAddress,
+          this.devicesWithState[device.macAddress].stateInfo
+        );
         this.publishDevicesWithState();
       };
 
@@ -117,13 +124,18 @@ export class DeviceService implements OnDestroy {
           );
           setTimeout(connect, reconnectDelay);
         } else {
-          console.error(`Max reconnection attempts reached for ${device.macAddress}.`);
+          console.error(
+            `Max reconnection attempts reached for ${device.macAddress}.`
+          );
         }
         this.publishDevicesWithState();
       };
 
       ws.onerror = error => {
-        console.error(`WebSocket error for device ${device.macAddress}:`, error);
+        console.error(
+          `WebSocket error for device ${device.macAddress}:`,
+          error
+        );
       };
     };
 

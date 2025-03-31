@@ -15,7 +15,9 @@ export class DeviceDetailsComponent {
   selectedDeviceAddress = computed(() => {
     const deviceWithState = this.deviceWithState();
     if (deviceWithState) {
-      return this.sanitizer.bypassSecurityTrustResourceUrl('http://' + deviceWithState.device.address);
+      return this.sanitizer.bypassSecurityTrustResourceUrl(
+        'http://' + deviceWithState.device.address
+      );
     }
     return undefined;
   });

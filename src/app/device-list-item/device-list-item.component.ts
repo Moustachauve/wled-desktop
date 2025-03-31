@@ -9,7 +9,13 @@ import { DeviceWithState } from '../device.service';
 
 @Component({
   selector: 'app-device-list-item',
-  imports: [MatCardModule, MatSlideToggleModule, MatSliderModule, MatIconModule, CommonModule],
+  imports: [
+    MatCardModule,
+    MatSlideToggleModule,
+    MatSliderModule,
+    MatIconModule,
+    CommonModule,
+  ],
   templateUrl: './device-list-item.component.html',
   styleUrl: './device-list-item.component.scss',
 })

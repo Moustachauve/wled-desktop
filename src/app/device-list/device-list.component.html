@@ -1,8 +1,14 @@
-@for (deviceWithState of devicesWithState; track deviceWithState.device.macAddress) {
+@for (
+  deviceWithState of devicesWithState;
+  track deviceWithState.device.macAddress
+) {
   <app-device-list-item
     [deviceWithState]="deviceWithState"
     (click)="setSelectedDevice(deviceWithState)"
-    [isSelected]="deviceWithState.device.macAddress === selectedDeviceWithState?.device?.macAddress"></app-device-list-item>
+    [isSelected]="
+      deviceWithState.device.macAddress ===
+      selectedDeviceWithState?.device?.macAddress
+    "></app-device-list-item>
 } @empty {
   <div>No device found.</div>
 }

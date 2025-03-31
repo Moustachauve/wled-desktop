@@ -11,7 +11,10 @@ mat-card {
   background-color: var(--mat-sys-surface);
 
   &:hover {
-    background-color: var(--mdc-elevated-card-container-color, var(--mat-sys-surface-container-low));
+    background-color: var(
+      --mdc-elevated-card-container-color,
+      var(--mat-sys-surface-container-low)
+    );
   }
 
   &.selected {

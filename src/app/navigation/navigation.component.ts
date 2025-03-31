@@ -36,10 +36,12 @@ export class NavigationComponent {
   readonly dialog = inject(MatDialog);
   selectedDeviceWithState: DeviceWithState | undefined;
 
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
-    map(result => result.matches),
-    shareReplay()
-  );
+  isHandset$: Observable<boolean> = this.breakpointObserver
+    .observe(Breakpoints.Handset)
+    .pipe(
+      map(result => result.matches),
+      shareReplay()
+    );
 
   openAddDeviceDialog() {
     this.dialog.open(DialogDeviceAddComponent);
