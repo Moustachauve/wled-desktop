@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
-import { Device } from '../lib/database/device';
 import { HttpClient } from '@angular/common/http';
-import { DeviceStateInfo, Info, State } from '../lib/device-api-types';
+import { Injectable } from '@angular/core';
+import { plainToInstance } from 'class-transformer';
 import { Observable, firstValueFrom } from 'rxjs';
 import { db } from '../lib/database/db';
-import { plainToInstance } from 'class-transformer';
+import { Device } from '../lib/database/device';
+import { DeviceStateInfo, Info } from '../lib/device-api-types';
 import { DeviceWithState } from './device.service';
 
 @Injectable({

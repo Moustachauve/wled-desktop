@@ -1,10 +1,9 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { DeviceListItemComponent } from '../device-list-item/device-list-item.component';
 import { DeviceService, DeviceWithState } from '../device.service';
-import { Device } from '../../lib/database/device';
-import { CommonModule } from '@angular/common';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-device-list-details',

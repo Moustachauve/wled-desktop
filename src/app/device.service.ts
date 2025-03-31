@@ -1,9 +1,9 @@
 import { Injectable, OnDestroy } from '@angular/core';
+import { Observable as DexieObservable, liveQuery, Subscription } from 'dexie';
+import { Observable, Subject } from 'rxjs';
 import { db } from '../lib/database/db';
 import { Device } from '../lib/database/device';
-import { liveQuery, Observable as DexieObservable, Subscription } from 'dexie';
-import { Subject, Observable } from 'rxjs';
-import { ParseDeviceJsonState, DeviceStateInfo } from '../lib/device-api-types';
+import { DeviceStateInfo, ParseDeviceJsonState } from '../lib/device-api-types';
 
 export class DeviceWithState {
   device!: Device;

@@ -1,8 +1,8 @@
+import js from '@eslint/js';
+import angular from 'angular-eslint';
 import { defineConfig } from 'eslint/config';
 import globals from 'globals';
-import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
-import angular from 'angular-eslint';
 
 export default defineConfig([
   // --- CommonJS and ESM files ---

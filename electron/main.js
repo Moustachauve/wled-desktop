@@ -1,7 +1,6 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
-import url from 'url';
-import { fileURLToPath } from 'url';
 import path from 'path';
+import url, { fileURLToPath } from 'url';
 //import mDnsSd from 'node-dns-sd';
 import { Bonjour } from 'bonjour-service';
 import os from 'os';
