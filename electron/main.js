@@ -26,6 +26,7 @@ function createWindow() {
       nodeIntegration: true,*/
     },
   });
+  win.removeMenu();
   win.webContents.openDevTools();
   win.loadFile(
     url.format({
