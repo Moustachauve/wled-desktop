@@ -9,6 +9,7 @@ import {
   MatSlideToggleModule,
 } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 import { DeviceService, DeviceWithState } from '../device.service';
 
@@ -21,6 +22,7 @@ import { DeviceService, DeviceWithState } from '../device.service';
     MatIconModule,
     CommonModule,
     FormsModule,
+    MatTooltipModule,
   ],
   templateUrl: './device-list-item.component.html',
   styleUrl: './device-list-item.component.scss',
@@ -63,5 +65,17 @@ export class DeviceListItemComponent implements OnInit, OnDestroy {
       this.brightness = parseInt(target.value, 10);
       this.brightnessSubject.next(this.brightness);
     }
+  }
+
+  getConnectionClass() {
+    return this.deviceWithState.isWebsocketConnected
+      ? 'connected'
+      : 'disconnected';
+  }
+
+  getConnectionTooltip() {
+    return this.deviceWithState.isWebsocketConnected
+      ? 'Connected to device'
+      : 'Not connected to device';
   }
 }

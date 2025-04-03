@@ -39,3 +39,24 @@ mat-card {
 .mat-mdc-card-content:last-child {
   padding-bottom: 0;
 }
+
+mat-card-title {
+  position: relative;
+}
+
+.connection-status {
+  position: absolute;
+  left: -16px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 5px;
+  width: 5px;
+  border-radius: 50%;
+
+  &.connected {
+    background-color: chartreuse;
+  }
+  &.disconnected {
+    background-color: red;
+  }
+}
