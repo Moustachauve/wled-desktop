@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, } from '@angular/core';
 import { Observable as DexieObservable, liveQuery, Subscription } from 'dexie';
 import { Observable, Subject } from 'rxjs';
 import { db } from '../lib/database/db';
@@ -98,7 +98,6 @@ export class DeviceService implements OnDestroy {
       };
 
       ws.onmessage = event => {
-        console.log(device.macAddress, event.data);
         const message = JSON.parse(event.data);
         if (!this.websocketMessages[device.macAddress]) {
           this.websocketMessages[device.macAddress] = [];
@@ -107,6 +106,7 @@ export class DeviceService implements OnDestroy {
         this.devicesWithState[device.macAddress].stateInfo =
           ParseDeviceJsonState(event.data);
         console.log(
+          'onmessage',
           device.macAddress,
           this.devicesWithState[device.macAddress].stateInfo
         );
@@ -142,10 +142,10 @@ export class DeviceService implements OnDestroy {
     connect(); // Initiate the initial connection
   }
 
-  sendMessage(macAddress: string, message: string) {
+  sendMessage(macAddress: string, message: object) {
     if (!macAddress || !this.deviceWebsockets[macAddress]) return;
 
-    this.deviceWebsockets[macAddress].send(JSON.stringify({ message }));
+    this.deviceWebsockets[macAddress].send(JSON.stringify(message));
   }
 
   closeAllWebsockets() {
@@ -167,6 +167,14 @@ export class DeviceService implements OnDestroy {
 
   async removeDevice(macAddress: string) {
     await db.devices.delete(macAddress);
+  }
+
+  togglePower(on: boolean, macAddress: string) {
+    this.sendMessage(macAddress, { on: on });
+  }
+
+  setBrightness(brightness: number, macAddress: string) {
+    this.sendMessage(macAddress, { bri: brightness });
   }
 
   /**
