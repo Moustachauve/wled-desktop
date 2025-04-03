@@ -20,7 +20,8 @@
         <mat-slide-toggle
           checked="{{ deviceWithState.stateInfo?.state?.isOn }}"
           hideIcon="true"
-          (change)="toggleSwitch($event)"></mat-slide-toggle>
+          (change)="toggleSwitch($event)"
+          (click)="$event.stopPropagation()"></mat-slide-toggle>
       </div>
     </mat-card-header>
     <mat-card-actions>
@@ -29,7 +30,8 @@
         max="255"
         step="1"
         discrete
-        (input)="onBrightnessInput($event)">
+        (input)="onBrightnessInput($event)"
+        (click)="$event.stopPropagation()">
         <input
           matSliderThumb
           value="{{ deviceWithState.stateInfo?.state?.brightness }}"
