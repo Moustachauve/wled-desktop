@@ -11,7 +11,9 @@ import { DeviceWithState } from './device.service';
   providedIn: 'root',
 })
 export class DeviceFirstContactService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.listenToElectronDiscovery();
+  }
 
   async tryCreateDevice(address: string): Promise<DeviceWithState> {
     console.log(address, 'Trying to create a new device');
@@ -37,5 +39,17 @@ export class DeviceFirstContactService {
 
   private getDeviceInfo(address: string): Observable<Info> {
     return this.http.get<Info>('http://' + address + '/json/info');
+  }
+
+  private listenToElectronDiscovery() {
+    if (!window.electron) {
+      console.log('Discovery is not available');
+      return;
+    }
+    console.log('Listening to electron discovery');
+    window.electron.onDeviceDiscovered(ipAddress => {
+      console.log('Potential device discovered', ipAddress);
+      this.tryCreateDevice(ipAddress);
+    });
   }
 }

@@ -1,19 +1,22 @@
+import { Bonjour } from 'bonjour-service';
 import { app, BrowserWindow, ipcMain } from 'electron';
+import os from 'os';
 import path from 'path';
 import url, { fileURLToPath } from 'url';
-//import mDnsSd from 'node-dns-sd';
-import { Bonjour } from 'bonjour-service';
-import os from 'os';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Keep a global reference of the window object, if you don't, the window will
+// be closed automatically when the JavaScript object is garbage collected.
+let win;
 
 // Error Handling
 process.on('uncaughtException', error => {
   console.error('Unexpected error: ', error);
 });
 function createWindow() {
-  const win = new BrowserWindow({
+  win = new BrowserWindow({
     width: 1200,
     height: 800,
     webPreferences: {
@@ -21,9 +24,7 @@ function createWindow() {
       nodeIntegration: false,
       contextIsolation: true,
       enableRemoteModule: false,
-      /*contextIsolation: true,
-      enableRemoteModule: false,
-      nodeIntegration: true,*/
+      sandbox: true,
     },
   });
   win.removeMenu();
@@ -63,7 +64,7 @@ function findDevices() {
       if (network.family !== 'IPv4' || network.internal !== false) {
         continue;
       }
-      console.log('Found network: ', network.address);
+      console.log('Searching on network: ', network.address);
       findDevicesForNetwork(network.address);
     }
   }
@@ -71,10 +72,15 @@ function findDevices() {
 
 function findDevicesForNetwork(networkInterface) {
   const instance = new Bonjour({ interface: networkInterface });
-  var i = 0;
   instance.find({ type: 'wled' }, function (service) {
-    i++;
-    console.log('Found an HTTP server:', service);
-    console.log('compteur: ', i, networkInterface);
+    console.log(
+      'Discovered a potential device:',
+      service.addresses,
+      service.name,
+      service.txt
+    );
+    // TODO: as an improvement, also send the mac address to the renderer so
+    // it can check if the device already exists without having to ping it.
+    win.webContents.send('device-discovered', service.addresses[0]);
   });
 }

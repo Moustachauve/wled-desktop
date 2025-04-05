@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy, } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Observable as DexieObservable, liveQuery, Subscription } from 'dexie';
 import { Observable, Subject } from 'rxjs';
 import { db } from '../lib/database/db';

@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { DeviceFirstContactService } from './device-first-contact.service';
 import { NavigationComponent } from './navigation/navigation.component';
 
 declare global {
   interface Window {
-    electronAPI: {
-      sendMessage: (message: string) => void;
+    electron: {
+      onDeviceDiscovered: (callback: (ipAddress: string) => void) => void;
     };
   }
 }
@@ -19,7 +20,5 @@ declare global {
 export class AppComponent {
   title = 'WLED';
 
-  sendMessage() {
-    window.electronAPI.sendMessage('Hello from Angular!');
-  }
+  constructor(private deviceFirstContactService: DeviceFirstContactService) {}
 }
