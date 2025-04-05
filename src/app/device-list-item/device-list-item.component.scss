@@ -1,14 +1,7 @@
-mat-slider {
-  width: 100%;
-}
-
-mat-slide-toggle {
-  float: right;
-}
-
 mat-card {
   cursor: pointer;
   background-color: var(--mat-sys-surface);
+  margin-bottom: 5px;
 
   &:hover {
     background-color: var(
@@ -59,4 +52,12 @@ mat-card-title {
   &.disconnected {
     background-color: red;
   }
+}
+
+mat-slider {
+  width: 100%;
+}
+
+mat-slide-toggle {
+  float: right;
 }
