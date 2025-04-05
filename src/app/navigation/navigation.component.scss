@@ -27,9 +27,19 @@
   height: 100%;
   > :first-child {
     flex: 0 1 400px;
+
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
   }
 
   > :last-child {
     flex: 1 0 370px;
   }
+}
+
+app-device-list {
+  flex: 1;
+  overflow: auto;
 }
