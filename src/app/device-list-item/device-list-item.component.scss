@@ -1,3 +1,5 @@
+@use '@angular/material' as mat;
+
 mat-card {
   cursor: pointer;
   background-color: var(--mat-sys-surface);
@@ -56,6 +58,23 @@ mat-card-title {
 
 mat-slider {
   width: 100%;
+  margin-top: -18px;
+  margin-bottom: -16px;
+
+  @include mat.slider-overrides(
+    (
+      active-track-height: 7px,
+      inactive-track-height: 7px,
+      with-overlap-handle-outline-width: 17px,
+      handle-height: 24px,
+      handle-width: 8px,
+    )
+  );
+
+  mat-slider-visual-thumb {
+    height: 24px;
+    width: 24px;
+  }
 }
 
 mat-slide-toggle {
