@@ -15,6 +15,10 @@ mat-card {
   &.selected {
     background-color: var(--mat-sys-primary-container);
   }
+
+  mat-card-content {
+    padding: 0;
+  }
 }
 
 .flex-container {
