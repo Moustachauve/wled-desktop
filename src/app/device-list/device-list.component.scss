@@ -1,3 +1,15 @@
+.mat-toolbar.mat-primary {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+
+  .end-actions {
+    display: flex;
+    justify-content: flex-end;
+    flex: 1;
+  }
+}
+
 .list-container {
   padding: 0 5px;
 }

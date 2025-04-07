@@ -1,3 +1,23 @@
+<mat-toolbar color="primary">
+  <button
+    type="button"
+    aria-label="Toggle sidenav"
+    mat-icon-button
+    (click)="onOpenSideBarMenu()">
+    <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+  </button>
+  <span>wled-desktop</span>
+  <div class="end-actions">
+    <button
+      type="button"
+      aria-label="Add device"
+      mat-icon-button
+      (click)="onOpenAddDeviceDialog()">
+      <mat-icon aria-label="Side nav toggle icon">add</mat-icon>
+    </button>
+  </div>
+</mat-toolbar>
+
 <div class="list-container">
   @for (
     deviceWithState of devicesWithState;

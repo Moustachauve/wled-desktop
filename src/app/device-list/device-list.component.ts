@@ -1,13 +1,23 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, output } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { DeviceListItemComponent } from '../device-list-item/device-list-item.component';
 import { DeviceService, DeviceWithState } from '../device.service';
 
 @Component({
   selector: 'app-device-list',
-  imports: [MatListModule, DeviceListItemComponent, CommonModule],
+  imports: [
+    MatToolbarModule,
+    MatButtonModule,
+    MatListModule,
+    DeviceListItemComponent,
+    CommonModule,
+    MatIconModule,
+  ],
   templateUrl: './device-list.component.html',
   styleUrl: './device-list.component.scss',
 })
@@ -17,6 +27,8 @@ export class DeviceListComponent implements OnInit {
   selectedDeviceAddress: SafeResourceUrl | null = null;
 
   deviceSelected = output<DeviceWithState>();
+  openAddDeviceDialog = output();
+  openSidebarMenu = output();
 
   showCheckbox = false;
   private checkedDevices: DeviceWithState[] = [];
@@ -28,6 +40,14 @@ export class DeviceListComponent implements OnInit {
 
   ngOnInit() {
     this.getDevices();
+  }
+
+  onOpenAddDeviceDialog() {
+    this.openAddDeviceDialog.emit();
+  }
+
+  onOpenSideBarMenu() {
+    this.openSidebarMenu.emit();
   }
 
   getDevices() {
