@@ -10,6 +10,13 @@ mat-card {
       --mdc-elevated-card-container-color,
       var(--mat-sys-surface-container-low)
     );
+
+    .device-checkbox {
+      display: flex;
+    }
+    .device-icon {
+      display: none;
+    }
   }
 
   &.selected {
@@ -29,6 +36,7 @@ mat-card {
 
 .title-row {
   flex: 1;
+  margin-left: 8px;
 }
 
 .mat-mdc-card-content:first-child {
@@ -43,9 +51,30 @@ mat-card-title {
   position: relative;
 }
 
+.title-row-action {
+  .device-icon {
+    width: 40px;
+    height: 40px;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--mat-sys-secondary-container);
+    border-radius: 50%;
+
+    mat-icon {
+      color: var(--mat-sys-on-secondary-container);
+    }
+  }
+  > * {
+    display: none;
+    margin-top: 1px;
+  }
+  .visible {
+    display: flex;
+  }
+}
+
 .connection-status {
   position: absolute;
-  left: -16px;
   top: 50%;
   transform: translateY(-50%);
   height: 5px;

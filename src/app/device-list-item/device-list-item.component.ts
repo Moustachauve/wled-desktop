@@ -3,6 +3,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import {
   MatSlideToggleChange,
@@ -23,6 +24,7 @@ import { DeviceService, DeviceWithState } from '../device.service';
     CommonModule,
     FormsModule,
     MatTooltipModule,
+    MatCheckboxModule,
   ],
   templateUrl: './device-list-item.component.html',
   styleUrl: './device-list-item.component.scss',
@@ -33,6 +35,7 @@ export class DeviceListItemComponent implements OnInit, OnDestroy {
   brightness = 0;
   private brightnessSubject = new Subject<number>();
   private destroy$ = new Subject<void>();
+  showCheckbox = false;
 
   constructor(private deviceService: DeviceService) {}
 

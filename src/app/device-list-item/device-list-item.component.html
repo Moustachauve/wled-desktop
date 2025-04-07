@@ -4,12 +4,26 @@
   [ngClass]="{ selected: isSelected }">
   <mat-card-content>
     <mat-card-header class="flex-container">
+      <div
+        class="connection-status"
+        [ngClass]="getConnectionClass()"
+        [matTooltip]="getConnectionTooltip()"></div>
+
+      <div class="title-row-action">
+        <mat-checkbox
+          class="device-checkbox"
+          [ngClass]="{ visible: isSelected }"
+          (click)="$event.stopPropagation()"></mat-checkbox>
+        <div class="device-icon" [ngClass]="{ visible: !isSelected }">
+          <mat-icon
+            aria-hidden="true"
+            aria-label="Device Icon"
+            fontIcon="lightbulb"></mat-icon>
+        </div>
+      </div>
+
       <div class="title-row">
         <mat-card-title>
-          <div
-            class="connection-status"
-            [ngClass]="getConnectionClass()"
-            [matTooltip]="getConnectionTooltip()"></div>
           {{ deviceWithState.displayName() }}
         </mat-card-title>
         <mat-card-subtitle>
