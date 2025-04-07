@@ -35,7 +35,8 @@
   }
 
   > :last-child {
-    flex: 1 0 370px;
+    flex: 1 1 450px;
+    min-width: 370px;
   }
 }
 
