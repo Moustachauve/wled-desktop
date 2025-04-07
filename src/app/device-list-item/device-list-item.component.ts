@@ -62,7 +62,6 @@ export class DeviceListItemComponent implements OnInit, OnDestroy {
   }
 
   onBrightnessInput(event: Event) {
-    console.log(event);
     const target = event.target as HTMLInputElement;
     if (target.value !== null) {
       this.brightness = parseInt(target.value, 10);
