@@ -1,14 +1,11 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, output } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
-import {
-  MatSlideToggleChange,
-  MatSlideToggleModule,
-} from '@angular/material/slide-toggle';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
@@ -32,10 +29,12 @@ import { DeviceService, DeviceWithState } from '../device.service';
 export class DeviceListItemComponent implements OnInit, OnDestroy {
   @Input() deviceWithState: DeviceWithState = {} as DeviceWithState;
   @Input() isSelected = false;
+  @Input() showCheckbox = false;
+  deviceChecked = output<boolean>();
+
   brightness = 0;
   private brightnessSubject = new Subject<number>();
   private destroy$ = new Subject<void>();
-  showCheckbox = false;
 
   constructor(private deviceService: DeviceService) {}
 
@@ -54,20 +53,25 @@ export class DeviceListItemComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  toggleSwitch(on: MatSlideToggleChange) {
-    console.log('toggleSwitch:', on);
+  toggleSwitch(isChecked: boolean) {
+    console.log('toggleSwitch:', isChecked);
     this.deviceService.togglePower(
-      on.checked,
+      isChecked,
       this.deviceWithState.device.macAddress
     );
   }
 
   onBrightnessInput(event: Event) {
+    console.log(event);
     const target = event.target as HTMLInputElement;
     if (target.value !== null) {
       this.brightness = parseInt(target.value, 10);
       this.brightnessSubject.next(this.brightness);
     }
+  }
+
+  onDeviceChecked(isChecked: boolean) {
+    this.deviceChecked.emit(isChecked);
   }
 
   getConnectionClass() {

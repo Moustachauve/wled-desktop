@@ -18,6 +18,9 @@ export class DeviceListComponent implements OnInit {
 
   deviceSelected = output<DeviceWithState>();
 
+  showCheckbox = false;
+  private checkedDevices: DeviceWithState[] = [];
+
   constructor(
     private deviceService: DeviceService,
     private sanitizer: DomSanitizer
@@ -40,5 +43,16 @@ export class DeviceListComponent implements OnInit {
     );
     this.deviceSelected.emit(deviceWithState);
     console.log(this.selectedDeviceAddress);
+  }
+
+  onDeviceChecked(deviceWithState: DeviceWithState, isChecked: boolean) {
+    if (isChecked) {
+      this.checkedDevices.push(deviceWithState);
+    } else {
+      this.checkedDevices = this.checkedDevices.filter(
+        checkedDevice => checkedDevice !== deviceWithState
+      );
+    }
+    this.showCheckbox = this.checkedDevices.length > 0;
   }
 }

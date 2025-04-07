@@ -12,9 +12,10 @@
       <div class="title-row-action">
         <mat-checkbox
           class="device-checkbox"
-          [ngClass]="{ visible: isSelected }"
+          [ngClass]="{ visible: showCheckbox }"
+          (change)="onDeviceChecked($event.checked)"
           (click)="$event.stopPropagation()"></mat-checkbox>
-        <div class="device-icon" [ngClass]="{ visible: !isSelected }">
+        <div class="device-icon" [ngClass]="{ visible: !showCheckbox }">
           <mat-icon
             aria-hidden="true"
             aria-label="Device Icon"
@@ -38,7 +39,7 @@
         <mat-slide-toggle
           checked="{{ deviceWithState.stateInfo?.state?.isOn }}"
           hideIcon="true"
-          (change)="toggleSwitch($event)"
+          (change)="toggleSwitch($event.checked)"
           (click)="$event.stopPropagation()"></mat-slide-toggle>
       </div>
     </mat-card-header>

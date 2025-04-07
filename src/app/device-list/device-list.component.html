@@ -9,7 +9,9 @@
       [isSelected]="
         deviceWithState.device.macAddress ===
         selectedDeviceWithState?.device?.macAddress
-      "></app-device-list-item>
+      "
+      (deviceChecked)="onDeviceChecked(deviceWithState, $event)"
+      [showCheckbox]="showCheckbox"></app-device-list-item>
   } @empty {
     <div>No device found.</div>
   }
