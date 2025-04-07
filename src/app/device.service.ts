@@ -117,6 +117,7 @@ export class DeviceService implements OnDestroy {
         console.log(`WebSocket closed for device ${device.macAddress}`);
         delete this.deviceWebsockets[device.macAddress];
         this.devicesWithState[device.macAddress].isWebsocketConnected = false;
+        this.publishDevicesWithState();
         if (reconnectAttempts < maxReconnectAttempts) {
           reconnectAttempts++;
           console.log(
@@ -128,10 +129,11 @@ export class DeviceService implements OnDestroy {
             `Max reconnection attempts reached for ${device.macAddress}.`
           );
         }
-        this.publishDevicesWithState();
       };
 
       ws.onerror = error => {
+        this.devicesWithState[device.macAddress].isWebsocketConnected = false;
+        this.publishDevicesWithState();
         console.error(
           `WebSocket error for device ${device.macAddress}:`,
           error
