@@ -15,6 +15,7 @@
   height: 100%;
   > :first-child {
     flex: 0 1 400px;
+    min-width: 290px;
 
     display: flex;
     flex-direction: column;
