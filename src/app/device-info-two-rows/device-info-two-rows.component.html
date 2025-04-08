@@ -1,10 +1,11 @@
-<mat-card-title>
+<div class="first-row">
   {{ deviceWithState.displayName() }}
-</mat-card-title>
-<mat-card-subtitle>
+</div>
+<div class="second-row">
   {{ deviceWithState.device.address }}
   <mat-icon
     aria-hidden="false"
     aria-label="Wifi Status"
+    inline="true"
     fontIcon="network_wifi_3_bar"></mat-icon>
-</mat-card-subtitle>
+</div>
