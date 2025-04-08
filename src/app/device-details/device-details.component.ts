@@ -1,22 +1,22 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, Input } from '@angular/core';
 import { MatToolbar } from '@angular/material/toolbar';
 import { DomSanitizer } from '@angular/platform-browser';
+import { DeviceInfoTwoRowsComponent } from '../device-info-two-rows/device-info-two-rows.component';
 import { DeviceWithState } from '../device.service';
 
 @Component({
   selector: 'app-device-details',
-  imports: [CommonModule, MatToolbar],
+  imports: [CommonModule, MatToolbar, DeviceInfoTwoRowsComponent],
   templateUrl: './device-details.component.html',
   styleUrl: './device-details.component.scss',
 })
 export class DeviceDetailsComponent {
-  deviceWithState = input<DeviceWithState>();
+  @Input() deviceWithState: DeviceWithState = {} as DeviceWithState;
   selectedDeviceAddress = computed(() => {
-    const deviceWithState = this.deviceWithState();
-    if (deviceWithState) {
+    if (this.deviceWithState) {
       return this.sanitizer.bypassSecurityTrustResourceUrl(
-        'http://' + deviceWithState.device.address
+        'http://' + this.deviceWithState.device.address
       );
     }
     return undefined;

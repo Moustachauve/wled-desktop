@@ -1,6 +1,11 @@
 <div class="container">
   <mat-toolbar color="primary">
-    <span>Second toolbar</span>
+    <span>
+      @if (deviceWithState) {
+        <app-device-info-two-rows
+          [deviceWithState]="deviceWithState"></app-device-info-two-rows>
+      }
+    </span>
   </mat-toolbar>
   @if (selectedDeviceAddress()) {
     <iframe [src]="selectedDeviceAddress()"></iframe>
