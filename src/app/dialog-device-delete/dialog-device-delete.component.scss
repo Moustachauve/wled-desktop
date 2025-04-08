@@ -1,0 +1,15 @@
+@use '@angular/material' as mat;
+
+.delete-button {
+  @include mat.button-overrides(
+    (
+      label-text-color: var(--mat-sys-error),
+    )
+  );
+}
+
+mat-dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}

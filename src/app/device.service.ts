@@ -116,7 +116,9 @@ export class DeviceService implements OnDestroy {
       ws.onclose = () => {
         console.log(`WebSocket closed for device ${device.macAddress}`);
         delete this.deviceWebsockets[device.macAddress];
-        this.devicesWithState[device.macAddress].isWebsocketConnected = false;
+        if (this.devicesWithState[device.macAddress]) {
+          this.devicesWithState[device.macAddress].isWebsocketConnected = false;
+        }
         this.publishDevicesWithState();
         if (reconnectAttempts < maxReconnectAttempts) {
           reconnectAttempts++;
@@ -169,6 +171,12 @@ export class DeviceService implements OnDestroy {
 
   async removeDevice(macAddress: string) {
     await db.devices.delete(macAddress);
+  }
+
+  async deleteDevices(devices: DeviceWithState[]) {
+    await db.devices.bulkDelete(
+      devices.map(device => device.device.macAddress)
+    );
   }
 
   togglePower(on: boolean, macAddress: string) {

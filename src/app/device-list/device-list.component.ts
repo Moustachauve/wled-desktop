@@ -1,12 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, output } from '@angular/core';
+import { Component, inject, OnInit, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { DeviceListItemComponent } from '../device-list-item/device-list-item.component';
 import { DeviceService, DeviceWithState } from '../device.service';
+import { DialogDeviceDeleteComponent } from '../dialog-device-delete/dialog-device-delete.component';
 
 @Component({
   selector: 'app-device-list',
@@ -17,18 +20,21 @@ import { DeviceService, DeviceWithState } from '../device.service';
     DeviceListItemComponent,
     CommonModule,
     MatIconModule,
+    MatTooltipModule,
   ],
   templateUrl: './device-list.component.html',
   styleUrl: './device-list.component.scss',
 })
 export class DeviceListComponent implements OnInit {
+  deviceSelected = output<DeviceWithState>();
+  openAddDeviceDialog = output();
+  openSidebarMenu = output();
+
   devicesWithState: DeviceWithState[] = [];
   selectedDeviceWithState: DeviceWithState | null = null;
   selectedDeviceAddress: SafeResourceUrl | null = null;
 
-  deviceSelected = output<DeviceWithState>();
-  openAddDeviceDialog = output();
-  openSidebarMenu = output();
+  readonly dialog = inject(MatDialog);
 
   showCheckbox = false;
   private checkedDevices: DeviceWithState[] = [];
@@ -42,12 +48,24 @@ export class DeviceListComponent implements OnInit {
     this.getDevices();
   }
 
+  onOpenSideBarMenu() {
+    this.openSidebarMenu.emit();
+  }
+
   onOpenAddDeviceDialog() {
     this.openAddDeviceDialog.emit();
   }
 
-  onOpenSideBarMenu() {
-    this.openSidebarMenu.emit();
+  onOpenDeleteDevicesDialog() {
+    const dialogRef = this.dialog.open(DialogDeviceDeleteComponent, {
+      data: this.checkedDevices,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.deviceService.deleteDevices(this.checkedDevices);
+      }
+    });
   }
 
   getDevices() {

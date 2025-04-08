@@ -8,9 +8,23 @@
   </button>
   <span>wled-desktop</span>
   <div class="end-actions">
+    @if (showCheckbox) {
+      <button
+        type="button"
+        aria-label="Delete device"
+        matTooltip="Delete selected device(s)"
+        matTooltipShowDelay="800"
+        mat-icon-button
+        class="delete-button"
+        (click)="onOpenDeleteDevicesDialog()">
+        <mat-icon aria-label="Side nav toggle icon">delete</mat-icon>
+      </button>
+    }
     <button
       type="button"
       aria-label="Add device"
+      matTooltip="Add a new device"
+      matTooltipShowDelay="800"
       mat-icon-button
       (click)="onOpenAddDeviceDialog()">
       <mat-icon aria-label="Side nav toggle icon">add</mat-icon>

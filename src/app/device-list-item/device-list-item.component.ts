@@ -10,6 +10,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 import { DeviceService, DeviceWithState } from '../device.service';
+import { DeviceInfoTwoRowsComponent } from "../device-info-two-rows/device-info-two-rows.component";
 
 @Component({
   selector: 'app-device-list-item',
@@ -22,7 +23,8 @@ import { DeviceService, DeviceWithState } from '../device.service';
     FormsModule,
     MatTooltipModule,
     MatCheckboxModule,
-  ],
+    DeviceInfoTwoRowsComponent
+],
   templateUrl: './device-list-item.component.html',
   styleUrl: './device-list-item.component.scss',
 })

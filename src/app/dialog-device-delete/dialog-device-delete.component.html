@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>Delete device(s)?</h2>
+<mat-dialog-content>
+  @for (deviceWithState of deviceList; track $index) {
+    <app-device-info-two-rows
+      [deviceWithState]="deviceWithState"></app-device-info-two-rows>
+  }
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button class="delete-button" [mat-dialog-close]="true">
+    Delete
+  </button>
+</mat-dialog-actions>
