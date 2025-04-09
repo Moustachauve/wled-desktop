@@ -17,3 +17,20 @@
 .delete-button {
   color: var(--mat-sys-error);
 }
+
+.no-devices {
+  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+
+  img {
+    max-height: 80px;
+  }
+
+  button {
+    margin: 14px;
+  }
+}

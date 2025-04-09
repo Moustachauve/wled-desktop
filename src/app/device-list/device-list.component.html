@@ -47,6 +47,12 @@
       (deviceChecked)="onDeviceChecked(deviceWithState, $event)"
       [showCheckbox]="showCheckbox"></app-device-list-item>
   } @empty {
-    <div>No device found.</div>
+    <div class="no-devices">
+      <img src="akemi_018_teeth.png" alt="No devices found" />
+      You don't have any visible devices
+      <button mat-flat-button (click)="onOpenAddDeviceDialog()">
+        <mat-icon>add</mat-icon> Add a new device
+      </button>
+    </div>
   }
 </div>
