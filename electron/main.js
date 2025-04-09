@@ -1,5 +1,5 @@
 import { Bonjour } from 'bonjour-service';
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import os from 'os';
 import path from 'path';
 import url, { fileURLToPath } from 'url';
@@ -43,6 +43,13 @@ function createWindow() {
       slashes: true,
     })
   );
+
+  // This is to make sure links with target "_blank" open in the external
+  // browser.
+  win.webContents.setWindowOpenHandler(({ url }) => {
+    shell.openExternal(url);
+    return { action: 'deny' };
+  });
 }
 
 // App Lifecycle
