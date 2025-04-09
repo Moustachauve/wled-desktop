@@ -10,6 +10,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { DeviceListItemComponent } from '../device-list-item/device-list-item.component';
 import { DeviceService, DeviceWithState } from '../device.service';
 import { DialogDeviceDeleteComponent } from '../dialog-device-delete/dialog-device-delete.component';
+import { LogoComponentComponent } from "../logo-component/logo-component.component";
 
 @Component({
   selector: 'app-device-list',
@@ -21,7 +22,8 @@ import { DialogDeviceDeleteComponent } from '../dialog-device-delete/dialog-devi
     CommonModule,
     MatIconModule,
     MatTooltipModule,
-  ],
+    LogoComponentComponent
+],
   templateUrl: './device-list.component.html',
   styleUrl: './device-list.component.scss',
 })

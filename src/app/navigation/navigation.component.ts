@@ -14,6 +14,7 @@ import { DeviceDetailsComponent } from '../device-details/device-details.compone
 import { DeviceListComponent } from '../device-list/device-list.component';
 import { DeviceWithState } from '../device.service';
 import { DialogDeviceAddComponent } from '../dialog-device-add/dialog-device-add.component';
+import { LogoComponentComponent } from "../logo-component/logo-component.component";
 
 @Component({
   selector: 'app-navigation',
@@ -29,7 +30,8 @@ import { DialogDeviceAddComponent } from '../dialog-device-add/dialog-device-add
     DeviceListComponent,
     DeviceDetailsComponent,
     RouterLink,
-  ],
+    LogoComponentComponent
+],
 })
 export class NavigationComponent {
   private breakpointObserver = inject(BreakpointObserver);

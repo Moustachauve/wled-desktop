@@ -4,10 +4,13 @@
 
 .sidenav {
   width: 300px;
-}
+  padding: 20px;
 
-.sidenav .mat-toolbar {
-  background: inherit;
+  .mat-toolbar {
+    background: inherit;
+    display: flex;
+    justify-content: center;
+  }
 }
 
 .two-pane {
