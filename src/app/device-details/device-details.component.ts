@@ -15,7 +15,7 @@ export class DeviceDetailsComponent {
   @Input() get deviceWithState(): DeviceWithState | undefined {
     return this._deviceWithState;
   }
-  set deviceWithState(deviceWithState: DeviceWithState) {
+  set deviceWithState(deviceWithState: DeviceWithState | undefined) {
     this._deviceWithState = deviceWithState;
     if (deviceWithState) {
       this.selectedDeviceAddress =
