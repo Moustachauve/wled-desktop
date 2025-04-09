@@ -1,14 +1,24 @@
 @use '@angular/material' as mat;
 
 mat-card {
+  --card-bacgrkound-color: var(--mat-sys-surface-container);
+
   cursor: pointer;
-  background-color: var(--mat-sys-surface-container);
+  background-color: var(--card-bacgrkound-color);
+
+  @include mat.slider-overrides(
+    (
+      active-track-height: 7px,
+      inactive-track-height: 7px,
+      with-overlap-handle-outline-width: 17px,
+      handle-height: 24px,
+      handle-width: 8px,
+      inactive-track-color: var(--mat-sys-inverse-primary),
+    )
+  );
 
   &:hover {
-    background-color: var(
-      --mdc-elevated-card-container-color,
-      var(--mat-sys-surface-container-highest)
-    );
+    --card-bacgrkound-color: var(--mat-sys-surface-container-highest);
 
     .device-checkbox {
       display: flex;
@@ -16,10 +26,22 @@ mat-card {
     .device-icon {
       display: none;
     }
+
+    @include mat.slider-overrides(
+      (
+        inactive-track-color: var(--mat-sys-primary-fixed),
+      )
+    );
   }
 
   &.selected {
-    background-color: var(--mat-sys-primary-container);
+    --card-bacgrkound-color: var(--mat-sys-primary-container);
+
+    @include mat.slider-overrides(
+      (
+        inactive-track-color: var(--mat-sys-primary),
+      )
+    );
   }
 
   mat-card-content {
@@ -27,6 +49,12 @@ mat-card {
   }
   mat-card-header {
     padding-top: 12px;
+  }
+
+  ::ng-deep.mdc-slider__thumb-knob {
+    box-shadow:
+      4px 0 var(--card-bacgrkound-color),
+      -4px 0 var(--card-bacgrkound-color);
   }
 }
 
@@ -59,7 +87,7 @@ mat-card-title {
     height: 40px;
     justify-content: center;
     align-items: center;
-    background-color: var(--mat-sys-secondary-container);
+    background-color: var(--mat-sys-on-primary);
     border-radius: 50%;
 
     mat-icon {
@@ -95,17 +123,6 @@ mat-slider {
   width: 100%;
   margin-top: -18px;
   margin-bottom: -16px;
-
-  @include mat.slider-overrides(
-    (
-      active-track-height: 7px,
-      inactive-track-height: 7px,
-      with-overlap-handle-outline-width: 17px,
-      handle-height: 24px,
-      handle-width: 8px,
-    )
-  );
-
   mat-slider-visual-thumb {
     height: 24px;
     width: 24px;
