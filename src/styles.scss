@@ -11,3 +11,10 @@ body {
   scrollbar-width: thin;
   scrollbar-color: #fff5 transparent;
 }
+
+mat-toolbar {
+  app-region: drag;
+}
+button {
+  app-region: no-drag;
+}
