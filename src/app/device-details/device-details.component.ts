@@ -4,10 +4,11 @@ import { MatToolbar } from '@angular/material/toolbar';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { DeviceInfoTwoRowsComponent } from '../device-info-two-rows/device-info-two-rows.component';
 import { DeviceWithState } from '../device.service';
+import { LogoComponentComponent } from "../logo-component/logo-component.component";
 
 @Component({
   selector: 'app-device-details',
-  imports: [CommonModule, MatToolbar, DeviceInfoTwoRowsComponent],
+  imports: [CommonModule, MatToolbar, DeviceInfoTwoRowsComponent, LogoComponentComponent],
   templateUrl: './device-details.component.html',
   styleUrl: './device-details.component.scss',
 })

@@ -2,13 +2,12 @@
 
 mat-card {
   cursor: pointer;
-  background-color: var(--mat-sys-surface);
-  margin-bottom: 5px;
+  background-color: var(--mat-sys-surface-container);
 
   &:hover {
     background-color: var(
       --mdc-elevated-card-container-color,
-      var(--mat-sys-surface-container-low)
+      var(--mat-sys-surface-container-highest)
     );
 
     .device-checkbox {

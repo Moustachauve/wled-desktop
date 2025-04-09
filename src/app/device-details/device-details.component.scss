@@ -4,7 +4,8 @@
   height: 100%;
 }
 
-iframe {
+iframe,
+.no-device {
   flex: 1;
   border: none;
   margin: 5px;
@@ -17,4 +18,17 @@ iframe {
     --mdc-elevated-card-container-elevation,
     var(--mat-sys-level1)
   );
+  background-color: var(--mat-sys-surface-container);
+}
+
+.no-device {
+  padding-top: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+
+  img {
+    max-height: 80px;
+  }
 }

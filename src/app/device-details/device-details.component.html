@@ -10,6 +10,9 @@
   @if (selectedDeviceAddress) {
     <iframe [src]="selectedDeviceAddress"></iframe>
   } @else {
-    <div>Select a device.</div>
+    <div class="no-device">
+      <app-logo-component></app-logo-component>
+      Select a device from the list
+    </div>
   }
 </div>

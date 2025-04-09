@@ -12,6 +12,9 @@
 
 .list-container {
   padding: 0 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .delete-button {
@@ -23,7 +26,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   gap: 4px;
 
   img {
