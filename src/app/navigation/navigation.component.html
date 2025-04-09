@@ -4,9 +4,10 @@
       <app-logo-component></app-logo-component>
     </mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item (click)="openAddDeviceDialog()" [routerLink]="[]"
-        >Add new device</a
-      >
+      <a mat-list-item (click)="openAddDeviceDialog()" [routerLink]="[]">
+        <mat-icon aria-label="Add device icon" matListItemIcon>add</mat-icon>
+        Add a new device
+      </a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
