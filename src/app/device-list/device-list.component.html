@@ -33,26 +33,28 @@
 </mat-toolbar>
 
 <div class="list-container">
-  @for (
-    deviceWithState of devicesWithState;
-    track deviceWithState.device.macAddress
-  ) {
-    <app-device-list-item
-      [deviceWithState]="deviceWithState"
-      (click)="setSelectedDevice(deviceWithState)"
-      [isSelected]="
-        deviceWithState.device.macAddress ===
-        selectedDeviceWithState?.device?.macAddress
-      "
-      (deviceChecked)="onDeviceChecked(deviceWithState, $event)"
-      [showCheckbox]="showCheckbox"></app-device-list-item>
-  } @empty {
-    <div class="no-devices">
-      <img src="akemi_018_teeth.png" alt="No devices found" />
-      You don't have any visible devices
-      <button mat-flat-button (click)="onOpenAddDeviceDialog()">
-        <mat-icon aria-label="Add device icon">add</mat-icon> Add a new device
-      </button>
-    </div>
-  }
+  <ngx-simplebar class="list">
+    @for (
+      deviceWithState of devicesWithState;
+      track deviceWithState.device.macAddress
+    ) {
+      <app-device-list-item
+        [deviceWithState]="deviceWithState"
+        (click)="setSelectedDevice(deviceWithState)"
+        [isSelected]="
+          deviceWithState.device.macAddress ===
+          selectedDeviceWithState?.device?.macAddress
+        "
+        (deviceChecked)="onDeviceChecked(deviceWithState, $event)"
+        [showCheckbox]="showCheckbox"></app-device-list-item>
+    } @empty {
+      <div class="no-devices">
+        <img src="akemi_018_teeth.png" alt="No devices found" />
+        You don't have any visible devices
+        <button mat-flat-button (click)="onOpenAddDeviceDialog()">
+          <mat-icon aria-label="Add device icon">add</mat-icon> Add a new device
+        </button>
+      </div>
+    }
+  </ngx-simplebar>
 </div>

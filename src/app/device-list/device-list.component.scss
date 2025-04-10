@@ -1,3 +1,9 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
 .mat-toolbar.mat-primary {
   position: sticky;
   top: 0;
@@ -11,10 +17,36 @@
 }
 
 .list-container {
-  padding: 0 5px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  flex: 1;
+  margin: 0 5px;
+  margin-left: 10px;
+  border-radius: var(--mat-sys-corner-medium);
+  overflow: hidden;
+
+  .list {
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 100%;
+
+    ::ng-deep.simplebar-content {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      &::before,
+      &::after {
+        content: initial;
+      }
+    }
+
+    ::ng-deep.simplebar-scrollbar {
+      pointer-events: all;
+      &::before {
+        background-color: var(--mat-sys-secondary);
+        inset: 3px;
+      }
+    }
+  }
 }
 
 .delete-button {

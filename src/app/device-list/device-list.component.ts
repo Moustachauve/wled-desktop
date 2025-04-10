@@ -7,10 +7,11 @@ import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { SimplebarAngularModule } from 'simplebar-angular';
 import { DeviceListItemComponent } from '../device-list-item/device-list-item.component';
 import { DeviceService, DeviceWithState } from '../device.service';
 import { DialogDeviceDeleteComponent } from '../dialog-device-delete/dialog-device-delete.component';
-import { LogoComponentComponent } from "../logo-component/logo-component.component";
+import { LogoComponentComponent } from '../logo-component/logo-component.component';
 
 @Component({
   selector: 'app-device-list',
@@ -22,8 +23,9 @@ import { LogoComponentComponent } from "../logo-component/logo-component.compone
     CommonModule,
     MatIconModule,
     MatTooltipModule,
-    LogoComponentComponent
-],
+    LogoComponentComponent,
+    SimplebarAngularModule,
+  ],
   templateUrl: './device-list.component.html',
   styleUrl: './device-list.component.scss',
 })
