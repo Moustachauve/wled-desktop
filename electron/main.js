@@ -21,6 +21,7 @@ function createWindow() {
     height: 800,
     minWidth: 700,
     minHeight: 500,
+    icon: path.join(__dirname, 'icon.ico'),
     titleBarStyle: 'hidden',
     titleBarOverlay: {
       color: '#10141400',
