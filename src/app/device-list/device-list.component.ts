@@ -38,6 +38,8 @@ export class DeviceListComponent implements OnInit {
 
   readonly dialog = inject(MatDialog);
 
+  // TODO: make showCheckbox observe checkedDevices so that it is updated
+  // automatically
   showCheckbox = false;
   private checkedDevices: DeviceWithState[] = [];
 
@@ -73,6 +75,8 @@ export class DeviceListComponent implements OnInit {
           }
         }
         this.deviceService.deleteDevices(this.checkedDevices);
+        this.checkedDevices = [];
+        this.showCheckbox = false;
       }
     });
   }
