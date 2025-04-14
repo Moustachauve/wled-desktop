@@ -1,14 +1,23 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, output } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { MatToolbar } from '@angular/material/toolbar';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { DeviceInfoTwoRowsComponent } from '../device-info-two-rows/device-info-two-rows.component';
 import { DeviceWithState } from '../device.service';
-import { LogoComponentComponent } from "../logo-component/logo-component.component";
+import { LogoComponentComponent } from '../logo-component/logo-component.component';
 
 @Component({
   selector: 'app-device-details',
-  imports: [CommonModule, MatToolbar, DeviceInfoTwoRowsComponent, LogoComponentComponent],
+  imports: [
+    CommonModule,
+    MatToolbar,
+    DeviceInfoTwoRowsComponent,
+    LogoComponentComponent,
+    MatIconModule,
+    MatButtonModule,
+  ],
   templateUrl: './device-details.component.html',
   styleUrl: './device-details.component.scss',
 })
@@ -27,7 +36,13 @@ export class DeviceDetailsComponent {
   }
   private _deviceWithState?: DeviceWithState;
 
+  openEditWindow = output();
+
   selectedDeviceAddress: SafeResourceUrl | undefined;
 
   constructor(private sanitizer: DomSanitizer) {}
+
+  onOpenEditWindow() {
+    this.openEditWindow.emit();
+  }
 }

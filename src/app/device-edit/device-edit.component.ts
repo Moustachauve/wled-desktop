@@ -1,9 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, output } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -20,6 +22,8 @@ import { DeviceService, DeviceWithState } from '../device.service';
     MatInputModule,
     CommonModule,
     ReactiveFormsModule,
+    MatIconModule,
+    MatButtonModule,
   ],
   templateUrl: './device-edit.component.html',
   styleUrl: './device-edit.component.scss',
@@ -33,6 +37,8 @@ export class DeviceEditComponent implements OnInit {
     this.updateForm();
   }
   private _deviceWithState?: DeviceWithState;
+
+  closeEditWindow = output();
 
   customName = new FormControl('');
   isVisible = new FormControl(true);
@@ -58,5 +64,9 @@ export class DeviceEditComponent implements OnInit {
     this.isVisible.setValue(false);
     // TODO: add update channel support
     this.updateChannel.setValue(0);
+  }
+
+  onCloseEditWindow() {
+    this.closeEditWindow.emit();
   }
 }

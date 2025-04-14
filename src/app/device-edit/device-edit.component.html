@@ -1,4 +1,13 @@
-<mat-toolbar color="primary">Edit device... </mat-toolbar>
+<mat-toolbar color="primary">
+  <button
+    type="button"
+    aria-label="Toggle sidenav"
+    mat-icon-button
+    (click)="onCloseEditWindow()">
+    <mat-icon aria-label="Side nav toggle icon">close</mat-icon>
+  </button>
+  Edit device...
+</mat-toolbar>
 
 <mat-card appearance="raised">
   <mat-card-content>

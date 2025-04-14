@@ -1,11 +1,21 @@
 <div class="container">
   <mat-toolbar color="primary">
-    <span>
-      @if (deviceWithState) {
-        <app-device-info-two-rows
-          [deviceWithState]="deviceWithState"></app-device-info-two-rows>
-      }
-    </span>
+    @if (deviceWithState) {
+      <app-device-info-two-rows
+        [deviceWithState]="deviceWithState"></app-device-info-two-rows>
+
+      <div class="end-actions">
+        <button
+          type="button"
+          aria-label="Edit device"
+          matTooltip="Edit device"
+          matTooltipShowDelay="800"
+          mat-icon-button
+          (click)="onOpenEditWindow()">
+          <mat-icon aria-label="Edit page toggle icon">edit</mat-icon>
+        </button>
+      </div>
+    }
   </mat-toolbar>
   @if (selectedDeviceAddress) {
     <iframe [src]="selectedDeviceAddress"></iframe>

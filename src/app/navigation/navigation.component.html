@@ -32,13 +32,15 @@
       </div>
       <div>
         <app-device-details
-          [deviceWithState]="selectedDeviceWithState"></app-device-details>
+          [deviceWithState]="selectedDeviceWithState"
+          (openEditWindow)="editWindow.open()"></app-device-details>
       </div>
     </div>
   </mat-sidenav-content>
 
-  <mat-sidenav mode="side" position="end" opened>
+  <mat-sidenav #editWindow mode="side" position="end">
     <app-device-edit
-      [deviceWithState]="selectedDeviceWithState"></app-device-edit>
+      [deviceWithState]="selectedDeviceWithState"
+      (closeEditWindow)="editWindow.close()"></app-device-edit>
   </mat-sidenav>
 </mat-sidenav-container>

@@ -4,6 +4,12 @@
   height: 100%;
 }
 
+.end-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex: 1;
+}
+
 iframe,
 .no-device {
   flex: 1;
