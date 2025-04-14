@@ -32,6 +32,8 @@ export class DeviceDetailsComponent {
         this.sanitizer.bypassSecurityTrustResourceUrl(
           'http://' + deviceWithState.device.address
         );
+    } else {
+      this.selectedDeviceAddress = undefined;
     }
   }
   private _deviceWithState?: DeviceWithState;
