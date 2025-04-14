@@ -1,6 +1,14 @@
-import { Component, Input, OnDestroy, OnInit, output } from '@angular/core';
+import {
+  booleanAttribute,
+  Component,
+  computed,
+  input,
+  model,
+  output,
+} from '@angular/core';
 
 import { CommonModule } from '@angular/common';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -8,9 +16,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { DeviceInfoTwoRowsComponent } from '../device-info-two-rows/device-info-two-rows.component';
 import { DeviceService, DeviceWithState } from '../device.service';
-import { DeviceInfoTwoRowsComponent } from "../device-info-two-rows/device-info-two-rows.component";
 
 @Component({
   selector: 'app-device-list-item',
@@ -23,67 +31,49 @@ import { DeviceInfoTwoRowsComponent } from "../device-info-two-rows/device-info-
     FormsModule,
     MatTooltipModule,
     MatCheckboxModule,
-    DeviceInfoTwoRowsComponent
-],
+    DeviceInfoTwoRowsComponent,
+  ],
   templateUrl: './device-list-item.component.html',
   styleUrl: './device-list-item.component.scss',
 })
-export class DeviceListItemComponent implements OnInit, OnDestroy {
-  @Input() deviceWithState: DeviceWithState = {} as DeviceWithState;
-  @Input() isSelected = false;
-  @Input() showCheckbox = false;
+export class DeviceListItemComponent {
+  deviceWithState = input({} as DeviceWithState);
+  isSelected = input(false, { transform: booleanAttribute });
+  showCheckbox = input(false, { transform: booleanAttribute });
   deviceChecked = output<boolean>();
 
-  brightness = 0;
-  private brightnessSubject = new Subject<number>();
-  private destroy$ = new Subject<void>();
+  brightness = model(0);
 
-  constructor(private deviceService: DeviceService) {}
+  connectionClass = computed(() =>
+    this.deviceWithState().isWebsocketConnected ? 'connected' : 'disconnected'
+  );
 
-  ngOnInit(): void {
-    this.brightnessSubject
-      .pipe(debounceTime(300), distinctUntilChanged(), takeUntil(this.destroy$))
+  connectionTooltip = computed(() =>
+    this.deviceWithState().isWebsocketConnected
+      ? 'Connected to device'
+      : 'Not connected to device'
+  );
+
+  constructor(private deviceService: DeviceService) {
+    toObservable(this.brightness)
+      .pipe(debounceTime(300), distinctUntilChanged(), takeUntilDestroyed())
       .subscribe(brightness => {
         this.deviceService.setBrightness(
           brightness,
-          this.deviceWithState.device.macAddress
+          this.deviceWithState().device.macAddress
         );
       });
-  }
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   toggleSwitch(isChecked: boolean) {
     console.log('toggleSwitch:', isChecked);
     this.deviceService.togglePower(
       isChecked,
-      this.deviceWithState.device.macAddress
+      this.deviceWithState().device.macAddress
     );
-  }
-
-  onBrightnessInput(event: Event) {
-    const target = event.target as HTMLInputElement;
-    if (target.value !== null) {
-      this.brightness = parseInt(target.value, 10);
-      this.brightnessSubject.next(this.brightness);
-    }
   }
 
   onDeviceChecked(isChecked: boolean) {
     this.deviceChecked.emit(isChecked);
-  }
-
-  getConnectionClass() {
-    return this.deviceWithState.isWebsocketConnected
-      ? 'connected'
-      : 'disconnected';
-  }
-
-  getConnectionTooltip() {
-    return this.deviceWithState.isWebsocketConnected
-      ? 'Connected to device'
-      : 'Not connected to device';
   }
 }

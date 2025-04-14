@@ -1,18 +1,18 @@
-<mat-card appearance="raised" [ngClass]="{ selected: isSelected }">
+<mat-card appearance="raised" [ngClass]="{ selected: isSelected() }">
   <mat-card-content>
     <mat-card-header class="flex-container">
       <div
         class="connection-status"
-        [ngClass]="getConnectionClass()"
-        [matTooltip]="getConnectionTooltip()"></div>
+        [ngClass]="connectionClass()"
+        [matTooltip]="connectionTooltip()"></div>
 
       <div class="title-row-action">
         <mat-checkbox
           class="device-checkbox"
-          [ngClass]="{ visible: showCheckbox }"
+          [ngClass]="{ visible: showCheckbox() }"
           (change)="onDeviceChecked($event.checked)"
           (click)="$event.stopPropagation()"></mat-checkbox>
-        <div class="device-icon" [ngClass]="{ visible: !showCheckbox }">
+        <div class="device-icon" [ngClass]="{ visible: !showCheckbox() }">
           <mat-icon
             aria-hidden="true"
             aria-label="Device Icon"
@@ -21,12 +21,12 @@
       </div>
 
       <app-device-info-two-rows
-        [deviceWithState]="deviceWithState"
+        [deviceWithState]="deviceWithState()"
         class="title-row"></app-device-info-two-rows>
 
       <div>
         <mat-slide-toggle
-          checked="{{ deviceWithState.stateInfo?.state?.isOn }}"
+          checked="{{ deviceWithState().stateInfo?.state?.isOn }}"
           hideIcon="true"
           (change)="toggleSwitch($event.checked)"
           (click)="$event.stopPropagation()"></mat-slide-toggle>
@@ -38,11 +38,10 @@
         max="255"
         step="1"
         discrete
-        (input)="onBrightnessInput($event)"
         (click)="$event.stopPropagation()">
         <input
           matSliderThumb
-          value="{{ deviceWithState.stateInfo?.state?.brightness }}"
+          value="{{ deviceWithState().stateInfo?.state?.brightness }}"
           [(ngModel)]="brightness" />
       </mat-slider>
     </mat-card-actions>
