@@ -15,7 +15,7 @@ export class DeviceWithState {
   }
 
   displayName() {
-    return this.device.customName ?? this.device.originalName ?? '(New Device)';
+    return this.device.customName || this.device.originalName || '(New Device)';
   }
 }
 
@@ -189,6 +189,11 @@ export class DeviceService implements OnDestroy {
     await db.devices.bulkDelete(
       devices.map(device => device.device.macAddress)
     );
+  }
+
+  async setCustomName(device: Device, customName?: string) {
+    device.customName = customName?.trim() ?? undefined;
+    await db.devices.update(device.macAddress, device);
   }
 
   togglePower(on: boolean, macAddress: string) {
