@@ -1,10 +1,10 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
-import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink } from '@angular/router';
@@ -38,6 +38,7 @@ import { LogoComponentComponent } from '../logo-component/logo-component.compone
 export class NavigationComponent {
   private breakpointObserver = inject(BreakpointObserver);
   readonly dialog = inject(MatDialog);
+  @ViewChild('editWindow') editWindow!: MatSidenav;
   selectedDeviceWithState: DeviceWithState | undefined;
 
   isHandset$: Observable<boolean> = this.breakpointObserver
@@ -51,7 +52,12 @@ export class NavigationComponent {
     this.dialog.open(DialogDeviceAddComponent);
   }
 
-  setSelectedDevice(deviceWithState: DeviceWithState) {
-    this.selectedDeviceWithState = deviceWithState;
+  setSelectedDevice(deviceWithState: DeviceWithState | null) {
+    console.log('setSelectedDevice', deviceWithState);
+    this.selectedDeviceWithState = deviceWithState ?? undefined;
+
+    if (this.selectedDeviceWithState == undefined) {
+      this.editWindow.close();
+    }
   }
 }

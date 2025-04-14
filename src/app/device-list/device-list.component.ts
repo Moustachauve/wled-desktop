@@ -6,7 +6,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { SimplebarAngularModule } from 'simplebar-angular';
 import { DeviceListItemComponent } from '../device-list-item/device-list-item.component';
 import { DeviceService, DeviceWithState } from '../device.service';
@@ -30,23 +29,19 @@ import { LogoComponentComponent } from '../logo-component/logo-component.compone
   styleUrl: './device-list.component.scss',
 })
 export class DeviceListComponent implements OnInit {
-  deviceSelected = output<DeviceWithState>();
+  deviceSelected = output<DeviceWithState | null>();
   openAddDeviceDialog = output();
   openSidebarMenu = output();
 
   devicesWithState: DeviceWithState[] = [];
   selectedDeviceWithState: DeviceWithState | null = null;
-  selectedDeviceAddress: SafeResourceUrl | null = null;
 
   readonly dialog = inject(MatDialog);
 
   showCheckbox = false;
   private checkedDevices: DeviceWithState[] = [];
 
-  constructor(
-    private deviceService: DeviceService,
-    private sanitizer: DomSanitizer
-  ) {}
+  constructor(private deviceService: DeviceService) {}
 
   ngOnInit() {
     this.getDevices();
@@ -67,6 +62,16 @@ export class DeviceListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
+        for (const device of this.checkedDevices) {
+          // If we just deleted the selected device, make sure to unselect it.
+          if (
+            device.device.macAddress ==
+            this.selectedDeviceWithState?.device.macAddress
+          ) {
+            this.setSelectedDevice(null);
+            break;
+          }
+        }
         this.deviceService.deleteDevices(this.checkedDevices);
       }
     });
@@ -78,13 +83,9 @@ export class DeviceListComponent implements OnInit {
     });
   }
 
-  setSelectedDevice(deviceWithState: DeviceWithState) {
+  setSelectedDevice(deviceWithState: DeviceWithState | null) {
     this.selectedDeviceWithState = deviceWithState;
-    this.selectedDeviceAddress = this.sanitizer.bypassSecurityTrustResourceUrl(
-      'http://' + deviceWithState.device.address
-    );
     this.deviceSelected.emit(deviceWithState);
-    console.log(this.selectedDeviceAddress);
   }
 
   onDeviceChecked(deviceWithState: DeviceWithState, isChecked: boolean) {
