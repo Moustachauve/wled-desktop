@@ -1,0 +1,35 @@
+<mat-toolbar color="primary">Edit device... </mat-toolbar>
+
+<mat-card appearance="raised">
+  <mat-card-content>
+    <div>
+      <mat-form-field>
+        <mat-label>Ip address or URL</mat-label>
+        <input
+          matInput
+          type="url"
+          disabled="true"
+          [value]="deviceWithState?.device?.address" />
+      </mat-form-field>
+    </div>
+    <div class="bottom-spacer">
+      <mat-form-field>
+        <mat-label>Custom name</mat-label>
+        <input matInput type="text" [formControl]="customName" />
+        <mat-hint>Leave this field empty to use the device name</mat-hint>
+      </mat-form-field>
+    </div>
+    <div class="form-row-container">
+      <mat-slide-toggle labelPosition="before">
+        Device is visible
+      </mat-slide-toggle>
+    </div>
+    <div class="form-row-container">
+      <div class="form-row-label">Update channel</div>
+      <mat-button-toggle-group name="updateChannel" aria-label="Update Channel">
+        <mat-button-toggle value="stable">Stable</mat-button-toggle>
+        <mat-button-toggle value="beta">Beta</mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+  </mat-card-content>
+</mat-card>

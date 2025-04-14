@@ -15,7 +15,7 @@ export class DeviceWithState {
   }
 
   displayName() {
-    return this.device.name ?? this.stateInfo?.info.name ?? '(New Device)';
+    return this.device.customName ?? this.device.originalName ?? '(New Device)';
   }
 }
 
@@ -24,6 +24,7 @@ export class DeviceWithState {
 })
 export class DeviceService implements OnDestroy {
   devices: Device[] = [];
+  // TODO: Move websocket logic in its own service
   private deviceWebsockets: Record<string, WebSocket> = {};
   private websocketMessages: Record<string, any[]> = {};
   private deviceChangesSubscription: Subscription | undefined;
@@ -103,8 +104,19 @@ export class DeviceService implements OnDestroy {
           this.websocketMessages[device.macAddress] = [];
         }
         this.websocketMessages[device.macAddress].push(message);
-        this.devicesWithState[device.macAddress].stateInfo =
-          ParseDeviceJsonState(event.data);
+
+        const deviceState = ParseDeviceJsonState(event.data);
+        this.devicesWithState[device.macAddress].stateInfo = deviceState;
+
+        // Update stored device state
+        // TODO: Should be extracted to its own function probably or done better.
+        this.devicesWithState[device.macAddress].device.originalName =
+          deviceState?.info.name;
+        db.devices.update(
+          device.macAddress,
+          this.devicesWithState[device.macAddress].device
+        );
+
         console.log(
           'onmessage',
           device.macAddress,

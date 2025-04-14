@@ -11,10 +11,11 @@ import { RouterLink } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { DeviceDetailsComponent } from '../device-details/device-details.component';
+import { DeviceEditComponent } from '../device-edit/device-edit.component';
 import { DeviceListComponent } from '../device-list/device-list.component';
 import { DeviceWithState } from '../device.service';
 import { DialogDeviceAddComponent } from '../dialog-device-add/dialog-device-add.component';
-import { LogoComponentComponent } from "../logo-component/logo-component.component";
+import { LogoComponentComponent } from '../logo-component/logo-component.component';
 
 @Component({
   selector: 'app-navigation',
@@ -30,8 +31,9 @@ import { LogoComponentComponent } from "../logo-component/logo-component.compone
     DeviceListComponent,
     DeviceDetailsComponent,
     RouterLink,
-    LogoComponentComponent
-],
+    LogoComponentComponent,
+    DeviceEditComponent,
+  ],
 })
 export class NavigationComponent {
   private breakpointObserver = inject(BreakpointObserver);

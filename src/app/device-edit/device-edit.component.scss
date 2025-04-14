@@ -1,0 +1,33 @@
+mat-card {
+  margin-right: 10px;
+}
+
+mat-form-field,
+mat-slide-toggle,
+.form-row-container {
+  width: 100%;
+}
+
+.bottom-spacer {
+  margin-bottom: 5px;
+}
+
+::ng-deep mat-slide-toggle > .mdc-form-field.mdc-form-field--align-end {
+  display: flex;
+
+  label {
+    flex-grow: 1;
+    font: var(--mat-sys-title-medium);
+  }
+}
+
+.form-row-container {
+  display: flex;
+  align-items: center;
+  min-height: 60px;
+  font: var(--mat-sys-title-medium);
+
+  .form-row-label {
+    flex: 1;
+  }
+}

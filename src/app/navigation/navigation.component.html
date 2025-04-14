@@ -36,4 +36,9 @@
       </div>
     </div>
   </mat-sidenav-content>
+
+  <mat-sidenav mode="side" position="end" opened>
+    <app-device-edit
+      [deviceWithState]="selectedDeviceWithState"></app-device-edit>
+  </mat-sidenav>
 </mat-sidenav-container>

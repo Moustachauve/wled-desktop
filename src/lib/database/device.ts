@@ -1,5 +1,6 @@
 export interface Device {
   macAddress: string;
   address: string;
-  name?: string;
+  originalName?: string;
+  customName?: string;
 }
