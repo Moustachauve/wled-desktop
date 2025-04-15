@@ -1,6 +1,20 @@
 # WledDesktop
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.4.
+WLED Desktop is still heavily a work in progress. Use at your own risk.
+
+### Features
+- Automatic device detection (mDNS)
+- All devices are accessible from one list
+- Custom names
+- Hide or delete devices
+
+## Build Electron
+
+To start this project in electron, run:
+
+```bash
+npm run electron
+```
 
 ## Development server
 
@@ -57,3 +71,12 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+
+## Disclaimer
+
+This project is not an official Google project. It is not supported by
+Google and Google specifically disclaims all warranties as to its quality,
+merchantability, or fitness for a particular purpose.
+
+Google Play and the Google Play logo are trademarks of Google LLC.
