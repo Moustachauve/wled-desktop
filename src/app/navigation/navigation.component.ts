@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, computed, inject, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,7 +13,7 @@ import { map, shareReplay } from 'rxjs/operators';
 import { DeviceDetailsComponent } from '../device-details/device-details.component';
 import { DeviceEditComponent } from '../device-edit/device-edit.component';
 import { DeviceListComponent } from '../device-list/device-list.component';
-import { DeviceWithState } from '../device.service';
+import { DeviceService, DeviceWithState } from '../device.service';
 import { DialogDeviceAddComponent } from '../dialog-device-add/dialog-device-add.component';
 import { LogoComponentComponent } from '../logo-component/logo-component.component';
 
@@ -41,12 +41,22 @@ export class NavigationComponent {
   @ViewChild('editWindow') editWindow!: MatSidenav;
   selectedDeviceWithState: DeviceWithState | undefined;
 
+  showHiddenDevices = computed(() => this.deviceService.showHiddenDevices());
+  showHiddenDevicesLabel = computed(() =>
+    this.showHiddenDevices() ? 'Hide hidden devices' : 'Show hidden devices'
+  );
+  showHiddenDevicesIcon = computed(() =>
+    this.showHiddenDevices() ? 'visibility_off' : 'visibility'
+  );
+
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe(Breakpoints.Handset)
     .pipe(
       map(result => result.matches),
       shareReplay()
     );
+
+  constructor(private deviceService: DeviceService) {}
 
   openAddDeviceDialog() {
     this.dialog.open(DialogDeviceAddComponent);
@@ -59,5 +69,9 @@ export class NavigationComponent {
     if (this.selectedDeviceWithState == undefined) {
       this.editWindow.close();
     }
+  }
+
+  toggleShowHiddenDevices() {
+    this.deviceService.showHiddenDevices.update(showHidden => !showHidden);
   }
 }

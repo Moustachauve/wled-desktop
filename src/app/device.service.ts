@@ -1,6 +1,7 @@
-import { Injectable, OnDestroy } from '@angular/core';
-import { Observable as DexieObservable, liveQuery, Subscription } from 'dexie';
-import { Observable, Subject } from 'rxjs';
+import { Injectable, OnDestroy, signal } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { liveQuery, Subscription } from 'dexie';
+import { Observable, Subject, switchMap } from 'rxjs';
 import { db } from '../lib/database/db';
 import { Device } from '../lib/database/device';
 import { DeviceStateInfo, ParseDeviceJsonState } from '../lib/device-api-types';
@@ -28,19 +29,23 @@ export class DeviceService implements OnDestroy {
   private deviceWebsockets: Record<string, WebSocket> = {};
   private websocketMessages: Record<string, any[]> = {};
   private deviceChangesSubscription: Subscription | undefined;
-  private devices$: DexieObservable<Device[]>;
+  private devices$: Observable<Device[]>;
   private devicesWithState: Record<string, DeviceWithState> = {};
   private devicesWithStateSubject = new Subject<DeviceWithState[]>();
   devicesWithState$: Observable<DeviceWithState[]> =
     this.devicesWithStateSubject.asObservable();
 
-  private showHiddenDevices = false;
+  showHiddenDevices = signal(false);
 
   constructor() {
-    this.devices$ = liveQuery(() =>
-      db.devices
-        .filter(device => device.isHidden === this.showHiddenDevices)
-        .toArray()
+    const showHidden$ = toObservable(this.showHiddenDevices);
+
+    this.devices$ = showHidden$.pipe(
+      switchMap(showHidden =>
+        liveQuery(() =>
+          db.devices.filter(device => showHidden || !device.isHidden).toArray()
+        )
+      )
     );
     this.deviceChangesSubscription = this.devices$.subscribe(devices => {
       // TODO: update devices in deviceWithState here too
@@ -182,6 +187,8 @@ export class DeviceService implements OnDestroy {
   getMessages(macAddress: string) {
     return this.websocketMessages[macAddress];
   }
+
+  // end websocket stuff
 
   async addDevice(device: Device) {
     await db.devices.put(device); // Use put for macAddress as primary key
