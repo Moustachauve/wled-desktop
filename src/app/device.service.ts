@@ -34,8 +34,14 @@ export class DeviceService implements OnDestroy {
   devicesWithState$: Observable<DeviceWithState[]> =
     this.devicesWithStateSubject.asObservable();
 
+  private showHiddenDevices = false;
+
   constructor() {
-    this.devices$ = liveQuery(() => db.devices.toArray());
+    this.devices$ = liveQuery(() =>
+      db.devices
+        .filter(device => device.isHidden === this.showHiddenDevices)
+        .toArray()
+    );
     this.deviceChangesSubscription = this.devices$.subscribe(devices => {
       // TODO: update devices in deviceWithState here too
       this.devices = devices;
@@ -193,6 +199,11 @@ export class DeviceService implements OnDestroy {
 
   async setCustomName(device: Device, customName?: string) {
     device.customName = customName?.trim() ?? undefined;
+    await db.devices.update(device.macAddress, device);
+  }
+
+  async setIsHidden(device: Device, isHidden: boolean) {
+    device.isHidden = isHidden;
     await db.devices.update(device.macAddress, device);
   }
 

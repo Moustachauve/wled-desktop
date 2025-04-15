@@ -27,6 +27,7 @@ export class DeviceFirstContactService {
     const device: Device = {
       macAddress: info.macAddress,
       address: address,
+      isHidden: false,
     };
     db.devices.put(device);
     console.log(address, 'Device created');
