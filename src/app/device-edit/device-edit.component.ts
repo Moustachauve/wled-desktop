@@ -64,7 +64,6 @@ export class DeviceEditComponent implements OnInit {
 
   updateForm() {
     this.customName.setValue(this.deviceWithState?.device.customName ?? null);
-    // TODO: add visibility support
     this.isVisible.setValue(!this.deviceWithState?.device?.isHidden);
     // TODO: add update channel support
     this.updateChannel.setValue(0);
