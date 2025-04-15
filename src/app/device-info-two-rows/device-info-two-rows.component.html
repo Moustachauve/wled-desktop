@@ -8,4 +8,12 @@
     aria-label="Wifi Status"
     inline="true"
     fontIcon="network_wifi_3_bar"></mat-icon>
+  @if (deviceWithState.device.isHidden) {
+    <mat-icon
+      aria-hidden="true"
+      aria-label="Hidden icon"
+      inline="true"
+      fontIcon="visibility_off"></mat-icon>
+    (Hidden)
+  }
 </div>

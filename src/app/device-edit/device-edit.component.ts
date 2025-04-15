@@ -49,19 +49,22 @@ export class DeviceEditComponent implements OnInit {
   ngOnInit(): void {
     this.customName.valueChanges.subscribe(value => {
       if (this.deviceWithState) {
-        console.log('v:', value);
         this.deviceService.setCustomName(
           this.deviceWithState.device,
           value ?? undefined
         );
       }
     });
+    this.isVisible.valueChanges.subscribe(value => {
+      if (this.deviceWithState) {
+        this.deviceService.setIsHidden(this.deviceWithState.device, !value);
+      }
+    });
   }
 
   updateForm() {
     this.customName.setValue(this.deviceWithState?.device.customName ?? null);
-    // TODO: add visibility support
-    this.isVisible.setValue(false);
+    this.isVisible.setValue(!this.deviceWithState?.device?.isHidden);
     // TODO: add update channel support
     this.updateChannel.setValue(0);
   }
