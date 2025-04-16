@@ -17,7 +17,7 @@ import { DeviceService, DeviceWithState } from '../device.service';
 import { DialogDeviceAddComponent } from '../dialog-device-add/dialog-device-add.component';
 import { LogoComponentComponent } from '../logo-component/logo-component.component';
 
-import { bugs, homepage, name, version } from '../../../package.json';
+import { author, bugs, homepage, name, version } from '../../../package.json';
 
 @Component({
   selector: 'app-navigation',
@@ -42,6 +42,7 @@ export class NavigationComponent {
   appVersion = version;
   appHomepage = homepage;
   appBugsUrl = bugs.url;
+  appAuthor = author;
 
   private breakpointObserver = inject(BreakpointObserver);
   readonly dialog = inject(MatDialog);
