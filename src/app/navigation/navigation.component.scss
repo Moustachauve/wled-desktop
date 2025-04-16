@@ -6,6 +6,12 @@
   width: 300px;
   padding: 20px;
 
+  .sidenav-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
   .mat-toolbar {
     background: inherit;
     display: flex;
@@ -14,6 +20,28 @@
 
   mat-divider {
     margin: 10px;
+  }
+
+  footer {
+    margin-top: auto;
+    text-align: center;
+    font: var(--mat-sys-body-small);
+
+    a {
+      color: var(--mat-sys-primary-fixed-dim);
+    }
+
+    .project-name {
+      font: var(--mat-sys-body-medium);
+    }
+
+    .copyright {
+      margin-top: 7px;
+      font: var(--mat-sys-body-small);
+      a {
+        color: var(--mat-sys-on-background);
+      }
+    }
   }
 }
 

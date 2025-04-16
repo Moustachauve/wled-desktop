@@ -1,32 +1,51 @@
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav #drawer class="sidenav" fixedInViewport>
-    <mat-toolbar>
-      <app-logo-component></app-logo-component>
-    </mat-toolbar>
-    <mat-nav-list>
-      <a mat-list-item (click)="openAddDeviceDialog()" [routerLink]="[]">
-        <mat-icon aria-label="Add device icon" matListItemIcon>add</mat-icon>
-        Add a new device
-      </a>
-      <a mat-list-item (click)="toggleShowHiddenDevices()" [routerLink]="[]">
-        <mat-icon [attr.aria-label]="showHiddenDevicesLabel()" matListItemIcon>
-          {{ showHiddenDevicesIcon() }}
-        </mat-icon>
-        {{ showHiddenDevicesLabel() }}
-      </a>
-      <mat-divider></mat-divider>
-      <a mat-list-item href="https://kno.wled.ge/" target="_blank">
-        <mat-icon aria-label="Help Icon" matListItemIcon>help</mat-icon>
-        WLED help
-      </a>
-      <a
-        mat-list-item
-        href="https://github.com/sponsors/Moustachauve/"
-        target="_blank">
-        <mat-icon aria-label="Coffee Icon" matListItemIcon>coffee</mat-icon>
-        Support Moustachauve
-      </a>
-    </mat-nav-list>
+    <div class="sidenav-content">
+      <mat-toolbar>
+        <app-logo-component></app-logo-component>
+      </mat-toolbar>
+      <mat-nav-list>
+        <a mat-list-item (click)="openAddDeviceDialog()" [routerLink]="[]">
+          <mat-icon aria-label="Add device icon" matListItemIcon>add</mat-icon>
+          Add a new device
+        </a>
+        <a mat-list-item (click)="toggleShowHiddenDevices()" [routerLink]="[]">
+          <mat-icon
+            [attr.aria-label]="showHiddenDevicesLabel()"
+            matListItemIcon>
+            {{ showHiddenDevicesIcon() }}
+          </mat-icon>
+          {{ showHiddenDevicesLabel() }}
+        </a>
+        <mat-divider></mat-divider>
+        <a mat-list-item href="https://kno.wled.ge/" target="_blank">
+          <mat-icon aria-label="Help Icon" matListItemIcon>help</mat-icon>
+          WLED help
+        </a>
+        <a
+          mat-list-item
+          href="https://github.com/sponsors/Moustachauve/"
+          target="_blank">
+          <mat-icon aria-label="Coffee Icon" matListItemIcon>coffee</mat-icon>
+          Support Moustachauve
+        </a>
+      </mat-nav-list>
+      <footer>
+        <div class="project-name">
+          <a href="{{ appHomepage }}" target="_blank"> {{ appName }} </a>
+        </div>
+        <div>
+          version {{ appVersion }} -
+          <a href="{{ appHomepage }}releases" target="_blank">What's new</a>
+        </div>
+        <div>
+          <a href="{{ appBugsUrl }}" target="_blank">Report an issue </a>
+        </div>
+        <div class="copyright">
+          <a href="https://cgagnier.ca/" target="_blank"> {{ appAuthor }}© </a>
+        </div>
+      </footer>
+    </div>
   </mat-sidenav>
   <mat-sidenav-content>
     <div class="two-pane">
