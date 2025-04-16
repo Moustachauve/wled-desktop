@@ -1,6 +1,12 @@
 {
   "name": "wled-desktop",
   "version": "0.0.0",
+  "homepage": "https://github.com/Moustachauve/wled-desktop/",
+  "bugs": {
+    "url": "https://github.com/Moustachauve/wled-desktop/issues"
+  },
+  "license": "MIT",
+  "author": "Christophe Gagnier",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
