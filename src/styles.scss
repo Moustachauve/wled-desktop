@@ -21,6 +21,8 @@ mat-toolbar.top-toolbar {
 }
 
 button,
-.mat-drawer-shown {
+.mat-drawer-shown,
+input {
   -webkit-app-region: no-drag;
+}
 }
