@@ -12,9 +12,15 @@ body {
   scrollbar-color: #fff5 transparent;
 }
 
-mat-toolbar {
-  app-region: drag;
+mat-toolbar.top-toolbar {
+  -webkit-app-region: drag;
+  padding-top: env(titlebar-area-height, 0);
+  height: calc(
+    var(--mat-toolbar-standard-height, 64px) + env(titlebar-area-height, 0)
+  );
 }
-button {
-  app-region: no-drag;
+
+button,
+.mat-drawer-shown {
+  -webkit-app-region: no-drag;
 }
