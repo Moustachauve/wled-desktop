@@ -33,12 +33,18 @@
         Device is visible
       </mat-slide-toggle>
     </div>
+
+    <mat-divider></mat-divider>
     <div class="form-row-container">
       <div class="form-row-label">Update channel</div>
-      <mat-button-toggle-group name="updateChannel" aria-label="Update Channel">
+      <mat-button-toggle-group
+        name="updateChannel"
+        aria-label="Update Channel"
+        disabled>
         <mat-button-toggle value="stable">Stable</mat-button-toggle>
         <mat-button-toggle value="beta">Beta</mat-button-toggle>
       </mat-button-toggle-group>
     </div>
+    <div class="coming-soon">(Coming soon)</div>
   </mat-card-content>
 </mat-card>
