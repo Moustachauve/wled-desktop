@@ -102,7 +102,7 @@ export class DialogDeviceAddComponent {
     this.currentStep = AddStep.Adding;
     try {
       this.deviceWithState =
-        await this.deviceFirstContactService.tryCreateDevice(address);
+        await this.deviceFirstContactService.fetchAndUpsertDevice(address);
     } catch (error) {
       this.errorMessage = 'Could not add device.';
       console.error(error);
