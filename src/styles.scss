@@ -16,7 +16,7 @@ mat-toolbar.top-toolbar {
   -webkit-app-region: drag;
   padding-top: env(titlebar-area-height, 0);
   height: calc(
-    var(--mat-toolbar-standard-height, 64px) + env(titlebar-area-height, 0)
+    var(--mat-toolbar-standard-height, 64px) + env(titlebar-area-height, 0px)
   );
 }
 
