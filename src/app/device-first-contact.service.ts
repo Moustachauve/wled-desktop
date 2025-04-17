@@ -74,11 +74,11 @@ export class DeviceFirstContactService {
     const info = plainToInstance(Info, plainInfo);
     if (!info.macAddress) {
       console.error(
-        `No MAC address returned for address: ${address}`,
+        `Could not retrieve MAC address for device at ${address}. Response:`,
         plainInfo
       );
       throw new Error(
-        `Could not retrieve MAC address for device at ${address}`
+        `Could not retrieve MAC address for device at ${address}. See console for details.`
       );
     }
     const macAddress = info.macAddress;
