@@ -20,7 +20,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DeviceFirstContactService } from '../device-first-contact.service';
-import { DeviceWithState } from '../device.service';
+import { DeviceWithState } from '../device-websocket.service';
 
 enum AddStep {
   Form = 1,

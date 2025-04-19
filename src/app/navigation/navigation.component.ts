@@ -13,11 +13,12 @@ import { map, shareReplay } from 'rxjs/operators';
 import { DeviceDetailsComponent } from '../device-details/device-details.component';
 import { DeviceEditComponent } from '../device-edit/device-edit.component';
 import { DeviceListComponent } from '../device-list/device-list.component';
-import { DeviceService, DeviceWithState } from '../device.service';
+import { DeviceService } from '../device.service';
 import { DialogDeviceAddComponent } from '../dialog-device-add/dialog-device-add.component';
 import { LogoComponentComponent } from '../logo-component/logo-component.component';
 
 import { author, bugs, homepage, name, version } from '../../../package.json';
+import { DeviceWithState } from '../device-websocket.service';
 
 @Component({
   selector: 'app-navigation',
