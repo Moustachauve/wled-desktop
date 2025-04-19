@@ -8,7 +8,11 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { SimplebarAngularModule } from 'simplebar-angular';
 import { DeviceListItemComponent } from '../device-list-item/device-list-item.component';
-import { DeviceService, DeviceWithState } from '../device.service';
+import {
+  DeviceWebsocketService,
+  DeviceWithState,
+} from '../device-websocket.service';
+import { DeviceService } from '../device.service';
 import { DialogDeviceDeleteComponent } from '../dialog-device-delete/dialog-device-delete.component';
 import { LogoComponentComponent } from '../logo-component/logo-component.component';
 
@@ -43,7 +47,10 @@ export class DeviceListComponent implements OnInit {
   showCheckbox = false;
   private checkedDevices: DeviceWithState[] = [];
 
-  constructor(private deviceService: DeviceService) {}
+  constructor(
+    private deviceService: DeviceService,
+    private deviceWebsocketService: DeviceWebsocketService
+  ) {}
 
   ngOnInit() {
     this.getDevices();
@@ -74,7 +81,9 @@ export class DeviceListComponent implements OnInit {
             break;
           }
         }
-        this.deviceService.deleteDevices(this.checkedDevices);
+        this.deviceService.deleteDevices(
+          this.checkedDevices.map(device => device.device)
+        );
         this.checkedDevices = [];
         this.showCheckbox = false;
       }
@@ -82,9 +91,11 @@ export class DeviceListComponent implements OnInit {
   }
 
   getDevices() {
-    this.deviceService.devicesWithState$.subscribe(devicesWithState => {
-      this.devicesWithState = devicesWithState;
-    });
+    this.deviceWebsocketService.devicesWithState$.subscribe(
+      devicesWithState => {
+        this.devicesWithState = devicesWithState;
+      }
+    );
   }
 
   setSelectedDevice(deviceWithState: DeviceWithState | null) {

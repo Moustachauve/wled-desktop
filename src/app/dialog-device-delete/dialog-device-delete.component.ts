@@ -11,7 +11,7 @@ import {
   MatDialogTitle,
 } from '@angular/material/dialog';
 import { DeviceInfoTwoRowsComponent } from '../device-info-two-rows/device-info-two-rows.component';
-import { DeviceWithState } from '../device.service';
+import { DeviceWithState } from '../device-websocket.service';
 
 @Component({
   selector: 'app-dialog-device-delete',

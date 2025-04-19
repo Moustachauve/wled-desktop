@@ -9,8 +9,11 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
-import { DeviceService, DeviceWithState } from '../device.service';
-import { DeviceInfoTwoRowsComponent } from "../device-info-two-rows/device-info-two-rows.component";
+import { DeviceInfoTwoRowsComponent } from '../device-info-two-rows/device-info-two-rows.component';
+import {
+  DeviceWebsocketService,
+  DeviceWithState,
+} from '../device-websocket.service';
 
 @Component({
   selector: 'app-device-list-item',
@@ -23,8 +26,8 @@ import { DeviceInfoTwoRowsComponent } from "../device-info-two-rows/device-info-
     FormsModule,
     MatTooltipModule,
     MatCheckboxModule,
-    DeviceInfoTwoRowsComponent
-],
+    DeviceInfoTwoRowsComponent,
+  ],
   templateUrl: './device-list-item.component.html',
   styleUrl: './device-list-item.component.scss',
 })
@@ -38,13 +41,13 @@ export class DeviceListItemComponent implements OnInit, OnDestroy {
   private brightnessSubject = new Subject<number>();
   private destroy$ = new Subject<void>();
 
-  constructor(private deviceService: DeviceService) {}
+  constructor(private deviceWebsocketService: DeviceWebsocketService) {}
 
   ngOnInit(): void {
     this.brightnessSubject
       .pipe(debounceTime(300), distinctUntilChanged(), takeUntil(this.destroy$))
       .subscribe(brightness => {
-        this.deviceService.setBrightness(
+        this.deviceWebsocketService.setBrightness(
           brightness,
           this.deviceWithState.device.macAddress
         );
@@ -57,7 +60,7 @@ export class DeviceListItemComponent implements OnInit, OnDestroy {
 
   toggleSwitch(isChecked: boolean) {
     console.log('toggleSwitch:', isChecked);
-    this.deviceService.togglePower(
+    this.deviceWebsocketService.togglePower(
       isChecked,
       this.deviceWithState.device.macAddress
     );

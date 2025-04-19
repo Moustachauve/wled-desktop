@@ -10,7 +10,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { DeviceService, DeviceWithState } from '../device.service';
+import { DeviceWithState } from '../device-websocket.service';
+import { DeviceService } from '../device.service';
 
 @Component({
   selector: 'app-device-edit',
