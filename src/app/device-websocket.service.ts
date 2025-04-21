@@ -1,10 +1,18 @@
-import { Injectable, OnDestroy } from '@angular/core';
-import { plainToInstance } from 'class-transformer';
-import { Observable, retry, Subject, timer } from 'rxjs';
-import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
-import { db } from '../lib/database/db';
+import { Injectable, OnDestroy, signal, WritableSignal } from '@angular/core';
+import {
+  distinctUntilChanged,
+  map,
+  Observable,
+  scan,
+  shareReplay,
+  Subject,
+  take,
+  takeUntil,
+  tap,
+} from 'rxjs';
 import { Device } from '../lib/database/device';
 import { DeviceStateInfo } from '../lib/device-api-types';
+import { WebsocketClient } from '../lib/websocket-client';
 import { DeviceService } from './device.service';
 
 export interface DeviceWebsocketState {
@@ -14,9 +22,9 @@ export interface DeviceWebsocketState {
 }
 
 export class DeviceWithState {
-  device!: Device;
-  stateInfo: DeviceStateInfo | null = null;
-  isWebsocketConnected = false;
+  public readonly device!: Device;
+  public stateInfo: WritableSignal<DeviceStateInfo | null> = signal(null);
+  public isWebsocketConnected = signal(false);
 
   constructor(device: Device) {
     this.device = device;
@@ -31,152 +39,125 @@ export class DeviceWithState {
   providedIn: 'root',
 })
 export class DeviceWebsocketService implements OnDestroy {
-  private deviceWebsockets: Record<string, WebSocketSubject<unknown>> = {};
-  private devicesWithState: Record<string, DeviceWithState> = {};
-  private devicesWithStateSubject = new Subject<DeviceWithState[]>();
-
-  devicesWithState$: Observable<DeviceWithState[]> =
-    this.devicesWithStateSubject.asObservable();
+  private activeClientsMap$: Observable<Map<string, WebsocketClient>>;
+  public devicesWithState$: Observable<DeviceWithState[]>;
+  // Signal to trigger cleanup of all streams on service destroy
+  private serviceDestroy$ = new Subject<void>();
 
   constructor(private deviceService: DeviceService) {
-    this.deviceService.devices$.subscribe(devices => {
-      console.log('Devices changed:', devices);
-      this.syncDevicesWithState(devices);
-      this.manageWebsockets(devices);
-    });
+    // Create the stream that manages the clients list
+    this.activeClientsMap$ = this.deviceService.devices$.pipe(
+      // Map devices array to Map<macAddress, Device> for efficient lookup
+      map(devices => new Map(devices.map(d => [d.macAddress, d]))),
+
+      // Prevent scan recalculation if the device list content hasn't effectively changed
+      distinctUntilChanged((prevMap, currMap) => {
+        if (prevMap.size !== currMap.size) return false;
+        for (const key of currMap.keys()) {
+          console.log('comparing map and stuff');
+          if (!prevMap.has(key)) return false;
+          // TODO: Add deeper comparison if device properties relevant to WS
+          // connection might have changed. e.g.,
+          // if (prevMap.get(key)?.address !== currMap.get(key)?.address) return false;
+        }
+        return true;
+      }),
+
+      // Use scan to manage the lifecycle of WebsocketClients
+      scan((currentClientsMap, newDevicesMap) => {
+        const nextClientsMap = new Map<string, WebsocketClient>(
+          currentClientsMap
+        ); // Start with current map
+        const currentIds = new Set(currentClientsMap.keys());
+        const newIds = new Set(newDevicesMap.keys());
+
+        // console.log("[Scan] Current IDs:", currentIds, "New IDs:", newIds);
+
+        // 1. Identify and destroy clients for removed devices
+        currentIds.forEach(id => {
+          if (!newIds.has(id)) {
+            console.log(`[Scan] Device removed: ${id}. Destroying client.`);
+            const websocketClient = nextClientsMap.get(id);
+            websocketClient?.destroy(); // Trigger client cleanup
+            nextClientsMap.delete(id); // Remove from the map for the next state
+          }
+        });
+
+        // 2. Identify and create/connect clients for added devices
+        newIds.forEach(id => {
+          if (!currentIds.has(id)) {
+            console.log(`[Scan] Device added: ${id}. Creating client.`);
+            const device = newDevicesMap.get(id)!; // Device must exist here
+            const newClient = new WebsocketClient(device);
+            newClient.connect();
+            nextClientsMap.set(id, newClient); // Add to the map
+          }
+          // Optional: Handle device updates (e.g., IP address change)
+          // else {
+          //    const existingManaged = nextClientsMap.get(id)!;
+          //    const newDeviceData = newDevicesMap.get(id)!;
+          //    if (existingManaged.device.address !== newDeviceData.address) {
+          //        console.log(`[Scan] Device address changed for ${id}. Recreating client.`);
+          //        existingManaged.client.destroy(); // Destroy old one
+          //        const newClient = new WebsocketClient(newDeviceData); // Create new
+          //        newClient.connect();
+          //        nextClientsMap.set(id, { client: newClient, device: newDeviceData }); // Update map entry
+          //    }
+          // }
+        });
+
+        // Return the updated map which becomes the accumulator for the next emission
+        return nextClientsMap;
+      }, new Map<string, WebsocketClient>()), // Initial value for scan: empty map
+
+      tap(clientMap =>
+        console.log(`[Scan Output] Active clients: ${clientMap.size}`)
+      ),
+
+      // Ensure scan stops managing clients when the service is destroyed
+      takeUntil(this.serviceDestroy$),
+
+      // Share the map observable:
+      // - Avoids re-running scan for multiple subscribers.
+      // - Keeps the connection management active as long as there's at least one subscriber.
+      // - Replays the latest map to new subscribers.
+      shareReplay({ bufferSize: 1, refCount: true })
+    );
+
+    this.devicesWithState$ = this.activeClientsMap$.pipe(
+      // Map the Map<string, ManagedClient> to DeviceWithState[]
+      map(clientsMap => {
+        return Array.from(clientsMap.values()).map(managed => managed.state);
+      }),
+      // Optional: Prevent emitting identical arrays (shallow check)
+      distinctUntilChanged(
+        (prev, curr) =>
+          prev.length === curr.length && prev.every((p, i) => p === curr[i])
+      ),
+      // Ensure this stream also cleans up
+      takeUntil(this.serviceDestroy$),
+      // Share the final result array
+      shareReplay({ bufferSize: 1, refCount: true })
+    );
   }
 
   ngOnDestroy() {
-    this.closeAllWebsockets();
-  }
-
-  manageWebsockets(devices: Device[]) {
-    const currentMacAddresses = devices.map(device => device.macAddress);
-
-    // Close websockets for removed devices
-    Object.keys(this.deviceWebsockets)
-      .filter(macAddress => !currentMacAddresses.includes(macAddress))
-      .forEach(macAddress => {
-        if (this.deviceWebsockets[macAddress]) {
-          this.deviceWebsockets[macAddress].complete();
-          delete this.deviceWebsockets[macAddress];
-          delete this.devicesWithState[macAddress];
-        }
-      });
-
-    // Open websockets for new or existing devices
-    devices.forEach(device => {
-      if (!this.deviceWebsockets[device.macAddress]) {
-        this.openWebsocket(device);
-      }
-    });
-    this.publishDevicesWithState();
-  }
-
-  openWebsocket(device: Device) {
-    const websocketUrl = `ws://${device.address}/ws`;
-    let reconnectAttempts = 0;
-    const maxReconnectAttempts = 5; // Adjust as needed
-    const reconnectDelay = 15000; // Adjust delay in milliseconds
-
-    console.log(
-      `Initiating WebSocket connection for device ${device.macAddress}...`
-    );
-
-    this.deviceWebsockets[device.macAddress] = webSocket(websocketUrl);
-
-    this.deviceWebsockets[device.macAddress]
-      .pipe(
-        // Use exponential backoff to retry connecting to the device
-        retry({
-          count: maxReconnectAttempts,
-          delay: (_error, retryIndex) => {
-            const interval = reconnectDelay;
-            // Double the interval each time it fails to connect
-            const delay = Math.pow(2, retryIndex - 1) * interval;
-            console.log('retrying connection...', _error, retryIndex);
-            return timer(delay);
-          },
-        })
-      )
-      .subscribe({
-        next: message => {
-          console.log('onmessage', device.macAddress, message);
-          const deviceState = plainToInstance(DeviceStateInfo, message);
-          this.devicesWithState[device.macAddress].stateInfo = deviceState;
-
-          // Update stored device state
-          this.devicesWithState[device.macAddress].isWebsocketConnected = true;
-          // TODO: Should be extracted to its own function probably or done better.
-          this.devicesWithState[device.macAddress].device.originalName =
-            deviceState?.info.name;
-          db.devices.update(
-            device.macAddress,
-            this.devicesWithState[device.macAddress].device
-          );
-          this.publishDevicesWithState();
-        },
-        error: error => {
-          this.devicesWithState[device.macAddress].isWebsocketConnected = false;
-          this.publishDevicesWithState();
-          console.error(
-            `WebSocket error for device ${device.macAddress}:`,
-            error
-          );
-        },
-        complete: () => {
-          console.log(`WebSocket closed for device ${device.macAddress}`);
-          //delete this.deviceWebsockets[device.macAddress];
-          if (this.devicesWithState[device.macAddress]) {
-            this.devicesWithState[device.macAddress].isWebsocketConnected =
-              false;
-          }
-          this.publishDevicesWithState();
-        },
-      });
+    console.log('DeviceWebsocketService Destroying...');
+    this.serviceDestroy$.next();
+    this.serviceDestroy$.complete();
   }
 
   sendMessage(macAddress: string, message: object) {
-    if (!macAddress || !this.deviceWebsockets[macAddress]) return;
-    console.log(`Sending message to ${macAddress}:`, message);
-    this.deviceWebsockets[macAddress].next(message);
-  }
-
-  closeAllWebsockets() {
-    Object.values(this.deviceWebsockets).forEach(ws => {
-      ws.complete();
-    });
-    this.deviceWebsockets = {};
-    this.devicesWithState = {};
-  }
-
-  /**
-   * Sync the DevicesWithState map with the device list. This makes sure each
-   * devices have an entry in devicesWithState and that the device object itself
-   * is kept to date
-   *
-   * This should be call anytime a change is made to the list of devices.
-   */
-  private syncDevicesWithState(devices: Device[]) {
-    // Make sure the device object itself is up to date.
-    devices.forEach(device => {
-      if (this.devicesWithState[device.macAddress]) {
-        this.devicesWithState[device.macAddress].device = device;
+    this.activeClientsMap$.pipe(take(1)).subscribe(map => {
+      const managedClient = map.get(macAddress);
+      if (managedClient) {
+        managedClient.sendMessage(message);
       } else {
-        this.devicesWithState[device.macAddress] = new DeviceWithState(device);
+        console.warn(
+          `[SendMessage] No active client found for device ${macAddress}`
+        );
       }
     });
-    this.publishDevicesWithState();
-  }
-
-  /**
-   * Publish the list of devices and their state to any subsribers of the
-   * observable list. Should be called every time a device or its state are
-   * modified.
-   */
-  private publishDevicesWithState() {
-    const deviceWithStateArray = Object.values(this.devicesWithState);
-    this.devicesWithStateSubject.next(deviceWithStateArray);
   }
 
   togglePower(on: boolean, macAddress: string) {

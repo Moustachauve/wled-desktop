@@ -1,4 +1,11 @@
-import { Component, Input, OnDestroy, OnInit, output } from '@angular/core';
+import {
+  Component,
+  computed,
+  Input,
+  OnDestroy,
+  OnInit,
+  output,
+} from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -9,6 +16,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
+import { DeviceStateInfo } from '../../lib/device-api-types';
 import { DeviceInfoTwoRowsComponent } from '../device-info-two-rows/device-info-two-rows.component';
 import {
   DeviceWebsocketService,
@@ -40,6 +48,22 @@ export class DeviceListItemComponent implements OnInit, OnDestroy {
   brightness = 0;
   private brightnessSubject = new Subject<number>();
   private destroy$ = new Subject<void>();
+
+  connectionClass = computed(() => {
+    return this.deviceWithState.isWebsocketConnected()
+      ? 'connected'
+      : 'disconnected';
+  });
+
+  connectionTooltip = computed(() => {
+    return this.deviceWithState.isWebsocketConnected()
+      ? 'Connected to device'
+      : 'Not connected to device';
+  });
+
+  state = computed(() => {
+    return this.deviceWithState.stateInfo() || ({} as DeviceStateInfo);
+  });
 
   constructor(private deviceWebsocketService: DeviceWebsocketService) {}
 
@@ -76,17 +100,5 @@ export class DeviceListItemComponent implements OnInit, OnDestroy {
 
   onDeviceChecked(isChecked: boolean) {
     this.deviceChecked.emit(isChecked);
-  }
-
-  getConnectionClass() {
-    return this.deviceWithState.isWebsocketConnected
-      ? 'connected'
-      : 'disconnected';
-  }
-
-  getConnectionTooltip() {
-    return this.deviceWithState.isWebsocketConnected
-      ? 'Connected to device'
-      : 'Not connected to device';
   }
 }

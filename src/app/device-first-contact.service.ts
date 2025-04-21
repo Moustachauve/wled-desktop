@@ -107,9 +107,11 @@ export class DeviceFirstContactService {
 
     // 3. Combine DB record with State Info
     const deviceWithState = new DeviceWithState(device);
-    deviceWithState.stateInfo = plainToInstance(DeviceStateInfo, {
-      info: plainInfo,
-    });
+    deviceWithState.stateInfo.set(
+      plainToInstance(DeviceStateInfo, {
+        info: plainInfo,
+      })
+    );
 
     console.log(`Successfully processed device for address: ${address}`);
     return deviceWithState;
