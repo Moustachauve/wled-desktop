@@ -5,7 +5,7 @@ import { Observable, firstValueFrom } from 'rxjs';
 import { db } from '../lib/database/db';
 import { Device } from '../lib/database/device';
 import { DeviceStateInfo, Info } from '../lib/device-api-types';
-import { DeviceWithState } from './device-websocket.service';
+import { DeviceWithState } from '../lib/websocket-client';
 
 @Injectable({
   providedIn: 'root',
@@ -107,9 +107,11 @@ export class DeviceFirstContactService {
 
     // 3. Combine DB record with State Info
     const deviceWithState = new DeviceWithState(device);
-    deviceWithState.stateInfo = plainToInstance(DeviceStateInfo, {
-      info: plainInfo,
-    });
+    deviceWithState.stateInfo.set(
+      plainToInstance(DeviceStateInfo, {
+        info: plainInfo,
+      })
+    );
 
     console.log(`Successfully processed device for address: ${address}`);
     return deviceWithState;

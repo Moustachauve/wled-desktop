@@ -5,8 +5,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbar } from '@angular/material/toolbar';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { DeviceInfoTwoRowsComponent } from '../device-info-two-rows/device-info-two-rows.component';
-import { DeviceWithState } from '../device-websocket.service';
 import { LogoComponentComponent } from '../logo-component/logo-component.component';
+import { DeviceWithState } from '../../lib/websocket-client';
 
 @Component({
   selector: 'app-device-details',

@@ -18,7 +18,7 @@ import { DialogDeviceAddComponent } from '../dialog-device-add/dialog-device-add
 import { LogoComponentComponent } from '../logo-component/logo-component.component';
 
 import { author, bugs, homepage, name, version } from '../../../package.json';
-import { DeviceWithState } from '../device-websocket.service';
+import { DeviceWithState } from '../../lib/websocket-client';
 
 @Component({
   selector: 'app-navigation',
