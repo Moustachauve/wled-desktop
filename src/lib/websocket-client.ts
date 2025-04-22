@@ -19,8 +19,9 @@ import { db } from './database/db';
 import { Device } from './database/device';
 import { DeviceStateInfo } from './device-api-types';
 
-const MAX_RECONNECTION_ATTEMPTS = 5;
-const RECONNECT_DELAY = 5000; // 5 seconds, with exponential backoff
+const RECONNECTION_DELAY = 2500; // 2.5 seconds, with exponential backoff
+// Exponential backoff will never wait longer than this amount of time.
+const MAX_RECONNECTION_DELAY = 60000; // 60 seconds.
 
 export class DeviceWithState {
   public readonly device!: Device;
@@ -55,17 +56,13 @@ export class WebsocketClient {
       url: websocketUrl,
       openObserver: {
         next: () => {
-          console.log(
-            `[WS Client ${this.state.device.macAddress}] WebSocket connected`
-          );
+          this.logMessage('WebSocket connected');
           this.state.isWebsocketConnected.set(true);
         },
       },
       closeObserver: {
         next: closeEvent => {
-          console.log(
-            `[WS Client ${this.state.device.macAddress}] WebSocket closed. Code: ${closeEvent.code}`
-          );
+          this.logMessage(`WebSocket closed. Code: ${closeEvent.code}`);
           this.state.isWebsocketConnected.set(false);
         },
       },
@@ -73,16 +70,25 @@ export class WebsocketClient {
 
     this.webSocket$ = webSocket(wsConfig);
     this.messages$ = this.webSocket$.pipe(
-      // Use exponential backoff to retry connecting to the device
+      // Retry connecting on error using exponential backoff.
+      // Attempts retries indefinitely starting with RECONNECTION_DELAY and
+      // doubling the delay for each attempt, capped at MAX_RECONNECTION_DELAY.
+      // The retry counter resets on success.
       retry({
-        count: MAX_RECONNECTION_ATTEMPTS,
-        delay: (_error, retryIndex) => {
-          const interval = RECONNECT_DELAY;
-          // Double the interval each time it fails to connect
-          const delay = Math.pow(2, retryIndex - 1) * interval;
-          console.log('retrying connection...', _error, retryIndex);
+        delay: (error, retryIndex) => {
+          // Calculate delay, capped at max delay
+          const delay = Math.min(
+            RECONNECTION_DELAY * Math.pow(2, retryIndex - 1),
+            MAX_RECONNECTION_DELAY
+          );
+          this.logMessage(
+            `Connection attempt ${retryIndex} failed. Retrying in ` +
+              `${delay / 1000}s...`,
+            error?.message || error
+          );
           return timer(delay);
         },
+        resetOnSuccess: true, // Reset retry counter after a successful connection
       }),
       catchError(error => {
         console.error(
@@ -95,9 +101,7 @@ export class WebsocketClient {
       }),
       finalize(() => {
         // Runs on complete, error, or unsubscribe (implicitly via takeUntil)
-        console.log(
-          `[WS Client ${this.state.device.macAddress}] Finalizing message stream.`
-        );
+        this.logMessage('Finalizing message stream.');
         this.state.isWebsocketConnected.set(false);
         this.webSocket$ = null; // Clean up subject reference
       })
@@ -113,9 +117,9 @@ export class WebsocketClient {
     }
     this.connectionSubscription = this.messages$.subscribe({
       next: message => {
-        console.log('onmessage', this.device.macAddress, message);
+        this.logMessage('onmessage', message);
         const deviceState = plainToInstance(DeviceStateInfo, message);
-        console.log('parsedMessage', deviceState);
+        this.logMessage('parsedMessage', deviceState);
         this.state.stateInfo.set(deviceState);
 
         // Update stored device state
@@ -132,7 +136,7 @@ export class WebsocketClient {
         );
       },
       complete: () => {
-        console.log(`WebSocket closed for device ${this.device.macAddress}`);
+        this.logMessage(`WebSocket closed`);
         //delete webSocket$;
         this.state.isWebsocketConnected.set(false);
       },
@@ -176,5 +180,12 @@ export class WebsocketClient {
       this.webSocket$.complete();
       this.webSocket$ = null;
     }
+  }
+
+  private logMessage(...messages: unknown[]) {
+    console.log(
+      `[WS Client][${this.state.device.macAddress}][${this.state.displayName()}] `,
+      ...messages
+    );
   }
 }
