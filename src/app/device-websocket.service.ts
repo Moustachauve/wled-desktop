@@ -1,6 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import {
-  distinctUntilChanged,
   map,
   Observable,
   scan,
@@ -34,21 +33,6 @@ export class DeviceWebsocketService implements OnDestroy {
     this.activeClientsMap$ = this.deviceService.devices$.pipe(
       // Map devices array to Map<macAddress, Device> for efficient lookup
       map(devices => new Map(devices.map(d => [d.macAddress, d]))),
-
-      // Prevents recalculations if the content of the map are the same as
-      // before.
-      distinctUntilChanged((prevMap, currMap) => {
-        // Different size must have changed.
-        if (prevMap.size !== currMap.size) return false;
-        for (const key of currMap.keys()) {
-          // Missing device is a change.
-          if (!prevMap.has(key)) return false;
-          // IP changed is also a change.
-          if (prevMap.get(key)?.address !== currMap.get(key)?.address)
-            return false;
-        }
-        return true;
-      }),
 
       // Use scan to maintain and manage the state of active WebSocket connections.
       // It compares the latest device list (newDevicesMap) with the previously known
@@ -130,11 +114,6 @@ export class DeviceWebsocketService implements OnDestroy {
       map(clientsMap => {
         return Array.from(clientsMap.values()).map(managed => managed.state);
       }),
-      // Optional: Prevent emitting identical arrays (shallow check)
-      distinctUntilChanged(
-        (prev, curr) =>
-          prev.length === curr.length && prev.every((p, i) => p === curr[i])
-      ),
       // Ensure scan stops managing clients when the service is destroyed
       takeUntil(this.serviceDestroy$),
       // Share the final result array

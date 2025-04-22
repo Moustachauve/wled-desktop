@@ -8,7 +8,7 @@
   </button>
   <app-logo-component></app-logo-component>
   <div class="end-actions">
-    @if (showCheckbox) {
+    @if (showCheckbox()) {
       <button
         type="button"
         aria-label="Delete device"
@@ -35,7 +35,7 @@
 <div class="list-container">
   <ngx-simplebar class="list">
     @for (
-      deviceWithState of devicesWithState;
+      deviceWithState of devicesWithState();
       track deviceWithState.device.macAddress
     ) {
       <app-device-list-item
@@ -46,7 +46,7 @@
           selectedDeviceWithState?.device?.macAddress
         "
         (deviceChecked)="onDeviceChecked(deviceWithState, $event)"
-        [showCheckbox]="showCheckbox"></app-device-list-item>
+        [showCheckbox]="showCheckbox()"></app-device-list-item>
     } @empty {
       <div class="no-devices">
         <img src="akemi_018_teeth.png" alt="No devices found" />
