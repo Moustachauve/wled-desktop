@@ -1,3 +1,4 @@
+import { signal, WritableSignal } from '@angular/core';
 import { plainToInstance } from 'class-transformer';
 import {
   catchError,
@@ -14,13 +15,26 @@ import {
   WebSocketSubject,
   WebSocketSubjectConfig,
 } from 'rxjs/webSocket';
-import { DeviceWithState } from '../app/device-websocket.service';
 import { db } from './database/db';
 import { Device } from './database/device';
 import { DeviceStateInfo } from './device-api-types';
 
 const MAX_RECONNECTION_ATTEMPTS = 5;
 const RECONNECT_DELAY = 5000; // 5 seconds, with exponential backoff
+
+export class DeviceWithState {
+  public readonly device!: Device;
+  public stateInfo: WritableSignal<DeviceStateInfo | null> = signal(null);
+  public isWebsocketConnected = signal(false);
+
+  constructor(device: Device) {
+    this.device = device;
+  }
+
+  displayName() {
+    return this.device.customName || this.device.originalName || '(New Device)';
+  }
+}
 
 export class WebsocketClient {
   private webSocket$: WebSocketSubject<object> | null = null;

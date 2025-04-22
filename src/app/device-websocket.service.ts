@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy, signal, WritableSignal } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import {
   distinctUntilChanged,
   map,
@@ -10,29 +10,14 @@ import {
   takeUntil,
   tap,
 } from 'rxjs';
-import { Device } from '../lib/database/device';
 import { DeviceStateInfo } from '../lib/device-api-types';
-import { WebsocketClient } from '../lib/websocket-client';
+import { DeviceWithState, WebsocketClient } from '../lib/websocket-client';
 import { DeviceService } from './device.service';
 
 export interface DeviceWebsocketState {
   macAddress: string;
   isConnected: boolean;
   stateInfo?: DeviceStateInfo; // Last known state from WebSocket
-}
-
-export class DeviceWithState {
-  public readonly device!: Device;
-  public stateInfo: WritableSignal<DeviceStateInfo | null> = signal(null);
-  public isWebsocketConnected = signal(false);
-
-  constructor(device: Device) {
-    this.device = device;
-  }
-
-  displayName() {
-    return this.device.customName || this.device.originalName || '(New Device)';
-  }
 }
 
 @Injectable({

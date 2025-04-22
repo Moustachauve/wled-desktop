@@ -7,11 +7,9 @@ import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { SimplebarAngularModule } from 'simplebar-angular';
+import { DeviceWithState } from '../../lib/websocket-client';
 import { DeviceListItemComponent } from '../device-list-item/device-list-item.component';
-import {
-  DeviceWebsocketService,
-  DeviceWithState,
-} from '../device-websocket.service';
+import { DeviceWebsocketService } from '../device-websocket.service';
 import { DeviceService } from '../device.service';
 import { DialogDeviceDeleteComponent } from '../dialog-device-delete/dialog-device-delete.component';
 import { LogoComponentComponent } from '../logo-component/logo-component.component';

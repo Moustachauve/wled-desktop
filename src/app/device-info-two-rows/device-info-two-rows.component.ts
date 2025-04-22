@@ -8,7 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { DeviceWithState } from '../device-websocket.service';
+import { DeviceWithState } from '../../lib/websocket-client';
 
 @Component({
   selector: 'app-device-info-two-rows',

@@ -26,7 +26,7 @@
 
       <div>
         <mat-slide-toggle
-          checked="{{ state().state.isOn }}"
+          [checked]="this.deviceWithState.stateInfo()?.state?.isOn"
           hideIcon="true"
           (change)="toggleSwitch($event.checked)"
           (click)="$event.stopPropagation()"></mat-slide-toggle>
@@ -42,8 +42,9 @@
         (click)="$event.stopPropagation()">
         <input
           matSliderThumb
-          value="{{ state().state.brightness }}"
-          [(ngModel)]="brightness" />
+          [value]="this.deviceWithState.stateInfo()?.state?.brightness"
+          [(ngModel)]="brightness"
+          [disabled]="!this.deviceWithState.isWebsocketConnected()" />
       </mat-slider>
     </mat-card-actions>
   </mat-card-content>

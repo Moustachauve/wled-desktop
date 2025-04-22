@@ -5,7 +5,7 @@ import { Observable, firstValueFrom } from 'rxjs';
 import { db } from '../lib/database/db';
 import { Device } from '../lib/database/device';
 import { DeviceStateInfo, Info } from '../lib/device-api-types';
-import { DeviceWithState } from './device-websocket.service';
+import { DeviceWithState } from '../lib/websocket-client';
 
 @Injectable({
   providedIn: 'root',

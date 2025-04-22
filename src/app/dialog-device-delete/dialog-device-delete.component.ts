@@ -10,8 +10,8 @@ import {
   MatDialogRef,
   MatDialogTitle,
 } from '@angular/material/dialog';
+import { DeviceWithState } from '../../lib/websocket-client';
 import { DeviceInfoTwoRowsComponent } from '../device-info-two-rows/device-info-two-rows.component';
-import { DeviceWithState } from '../device-websocket.service';
 
 @Component({
   selector: 'app-dialog-device-delete',

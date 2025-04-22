@@ -16,12 +16,9 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
-import { DeviceStateInfo } from '../../lib/device-api-types';
+import { DeviceWithState } from '../../lib/websocket-client';
 import { DeviceInfoTwoRowsComponent } from '../device-info-two-rows/device-info-two-rows.component';
-import {
-  DeviceWebsocketService,
-  DeviceWithState,
-} from '../device-websocket.service';
+import { DeviceWebsocketService } from '../device-websocket.service';
 
 @Component({
   selector: 'app-device-list-item',
@@ -59,10 +56,6 @@ export class DeviceListItemComponent implements OnInit, OnDestroy {
     return this.deviceWithState.isWebsocketConnected()
       ? 'Connected to device'
       : 'Not connected to device';
-  });
-
-  state = computed(() => {
-    return this.deviceWithState.stateInfo() || ({} as DeviceStateInfo);
   });
 
   constructor(private deviceWebsocketService: DeviceWebsocketService) {}

@@ -19,8 +19,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { DeviceWithState } from '../../lib/websocket-client';
 import { DeviceFirstContactService } from '../device-first-contact.service';
-import { DeviceWithState } from '../device-websocket.service';
 
 enum AddStep {
   Form = 1,
