@@ -125,8 +125,6 @@ export class WebsocketClient {
         this.logMessage('parsedMessage', deviceState);
         this.state.stateInfo.set(deviceState);
 
-        // Update stored device state
-        this.state.isWebsocketConnected.set(true);
         // TODO: Should be extracted to its own function probably or done better.
         this.state.device.originalName = deviceState?.info.name;
         db.devices.update(this.device.macAddress, this.state.device);
