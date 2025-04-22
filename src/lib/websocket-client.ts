@@ -104,6 +104,9 @@ export class WebsocketClient {
         this.logMessage('Finalizing message stream.');
         this.state.isWebsocketConnected.set(false);
         this.webSocket$ = null; // Clean up subject reference
+        if (this.connectionSubscription) {
+          this.connectionSubscription.unsubscribe();
+        }
       })
     );
     // Do NOT subscribe here. Connection triggered externally by `connect()`.
