@@ -21,7 +21,7 @@ import { DeviceStateInfo } from './device-api-types';
 
 const RECONNECTION_DELAY = 2500; // 2.5 seconds, with exponential backoff
 // Exponential backoff will never wait longer than this amount of time.
-const MAX_RECONNECTION_DELAY = 60000; // 60 seconds.
+const MAX_RECONNECTION_DELAY = 120000; // 120 seconds.
 
 export class DeviceWithState {
   public readonly device!: Device;
