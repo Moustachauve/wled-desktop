@@ -47,7 +47,7 @@ export class WebsocketClient {
   // Use Subject to signal cleanup internally
   private destroySignal$ = new Subject<void>();
 
-  constructor(private device: Device) {
+  constructor(public readonly device: Device) {
     this.state = new DeviceWithState(device);
     const websocketUrl = `ws://${this.device.address}/ws`;
 

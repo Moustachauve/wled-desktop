@@ -35,65 +35,81 @@ export class DeviceWebsocketService implements OnDestroy {
       // Map devices array to Map<macAddress, Device> for efficient lookup
       map(devices => new Map(devices.map(d => [d.macAddress, d]))),
 
-      // Prevent scan recalculation if the device list content hasn't effectively changed
+      // Prevents recalculations if the content of the map are the same as
+      // before.
       distinctUntilChanged((prevMap, currMap) => {
+        // Different size must have changed.
         if (prevMap.size !== currMap.size) return false;
         for (const key of currMap.keys()) {
-          console.log('comparing map and stuff');
+          // Missing device is a change.
           if (!prevMap.has(key)) return false;
-          // TODO: Add deeper comparison if device properties relevant to WS
-          // connection might have changed. e.g.,
-          // if (prevMap.get(key)?.address !== currMap.get(key)?.address) return false;
+          // IP changed is also a change.
+          if (prevMap.get(key)?.address !== currMap.get(key)?.address)
+            return false;
         }
         return true;
       }),
 
-      // Use scan to manage the lifecycle of WebsocketClients
+      // Use scan to maintain and manage the state of active WebSocket connections.
+      // It compares the latest device list (newDevicesMap) with the previously known
+      // active clients (currentClientsMap, the accumulator).
+      // This allows us to:
+      //   1. Detect when devices are removed and destroy their corresponding
+      //      WebSocket clients.
+      //   2. Detect when new devices are added and create/connect new WebSocket
+      //      clients.
+      //   3. (Future/Optional) Detect changes in existing devices (like IP
+      //      address) and potentially recreate clients.
+      // The output of scan is the updated map of active WebsocketClients.
       scan((currentClientsMap, newDevicesMap) => {
+        // Create a mutable copy of the current client map to build the next
+        // state. We start with a copy of the current client map to prevent
+        // recreating existing clients.
         const nextClientsMap = new Map<string, WebsocketClient>(
           currentClientsMap
-        ); // Start with current map
+        );
         const currentIds = new Set(currentClientsMap.keys());
         const newIds = new Set(newDevicesMap.keys());
 
-        // console.log("[Scan] Current IDs:", currentIds, "New IDs:", newIds);
-
-        // 1. Identify and destroy clients for removed devices
+        // 1. Identify and destroy clients for devices that are no longer present
         currentIds.forEach(id => {
           if (!newIds.has(id)) {
             console.log(`[Scan] Device removed: ${id}. Destroying client.`);
             const websocketClient = nextClientsMap.get(id);
-            websocketClient?.destroy(); // Trigger client cleanup
-            nextClientsMap.delete(id); // Remove from the map for the next state
+            websocketClient?.destroy(); // Ensure proper cleanup within the client
+            nextClientsMap.delete(id); // Remove from the map for the next emission
           }
         });
 
         // 2. Identify and create/connect clients for added devices
         newIds.forEach(id => {
           if (!currentIds.has(id)) {
+            // If the device exists in the new list but not in the previous one,
+            // then it is a new device. Add it to the list of clients.
             console.log(`[Scan] Device added: ${id}. Creating client.`);
             const device = newDevicesMap.get(id)!; // Device must exist here
             const newClient = new WebsocketClient(device);
             newClient.connect();
-            nextClientsMap.set(id, newClient); // Add to the map
+            nextClientsMap.set(id, newClient);
+          } else {
+            // If the device exists in both lists, check if it needs to be updated.
+            const existingClient = nextClientsMap.get(id)!;
+            const newDeviceData = newDevicesMap.get(id)!;
+            if (existingClient.device.address !== newDeviceData.address) {
+              console.log(
+                `[Scan] Device address changed for ${id}. Recreating client.`
+              );
+              existingClient.destroy(); // Destroy old one
+              const newClient = new WebsocketClient(newDeviceData); // Create new
+              newClient.connect();
+              nextClientsMap.set(id, newClient); // Update map entry
+            }
           }
-          // Optional: Handle device updates (e.g., IP address change)
-          // else {
-          //    const existingManaged = nextClientsMap.get(id)!;
-          //    const newDeviceData = newDevicesMap.get(id)!;
-          //    if (existingManaged.device.address !== newDeviceData.address) {
-          //        console.log(`[Scan] Device address changed for ${id}. Recreating client.`);
-          //        existingManaged.client.destroy(); // Destroy old one
-          //        const newClient = new WebsocketClient(newDeviceData); // Create new
-          //        newClient.connect();
-          //        nextClientsMap.set(id, { client: newClient, device: newDeviceData }); // Update map entry
-          //    }
-          // }
         });
 
-        // Return the updated map which becomes the accumulator for the next emission
+        // Return the updated map, which becomes the 'currentClientsMap' for the next iteration
         return nextClientsMap;
-      }, new Map<string, WebsocketClient>()), // Initial value for scan: empty map
+      }, new Map<string, WebsocketClient>()), // Initial state for scan is an empty map
 
       tap(clientMap =>
         console.log(`[Scan Output] Active clients: ${clientMap.size}`)
@@ -119,7 +135,7 @@ export class DeviceWebsocketService implements OnDestroy {
         (prev, curr) =>
           prev.length === curr.length && prev.every((p, i) => p === curr[i])
       ),
-      // Ensure this stream also cleans up
+      // Ensure scan stops managing clients when the service is destroyed
       takeUntil(this.serviceDestroy$),
       // Share the final result array
       shareReplay({ bufferSize: 1, refCount: true })
