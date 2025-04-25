@@ -1,4 +1,4 @@
-<mat-card appearance="raised" [ngClass]="{ selected: isSelected }">
+<mat-card appearance="raised" [ngClass]="{ selected: isSelected() }">
   <mat-card-content>
     <mat-card-header class="flex-container">
       <div
@@ -9,10 +9,10 @@
       <div class="title-row-action">
         <mat-checkbox
           class="device-checkbox"
-          [ngClass]="{ visible: showCheckbox }"
+          [ngClass]="{ visible: showCheckbox() }"
           (change)="onDeviceChecked($event.checked)"
           (click)="$event.stopPropagation()"></mat-checkbox>
-        <div class="device-icon" [ngClass]="{ visible: !showCheckbox }">
+        <div class="device-icon" [ngClass]="{ visible: !showCheckbox() }">
           <mat-icon
             aria-hidden="true"
             aria-label="Device Icon"
@@ -21,12 +21,12 @@
       </div>
 
       <app-device-info-two-rows
-        [deviceWithState]="deviceWithState"
+        [deviceWithState]="deviceWithState()"
         class="title-row"></app-device-info-two-rows>
 
       <div>
         <mat-slide-toggle
-          [checked]="this.deviceWithState.stateInfo()?.state?.isOn"
+          [checked]="this.deviceWithState().stateInfo()?.state?.isOn"
           hideIcon="true"
           (change)="toggleSwitch($event.checked)"
           (click)="$event.stopPropagation()"></mat-slide-toggle>
@@ -42,9 +42,9 @@
         (click)="$event.stopPropagation()">
         <input
           matSliderThumb
-          [value]="this.deviceWithState.stateInfo()?.state?.brightness"
+          [value]="this.deviceWithState().stateInfo()?.state?.brightness"
           [(ngModel)]="brightness"
-          [disabled]="!this.deviceWithState.isWebsocketConnected()" />
+          [disabled]="!this.deviceWithState().isWebsocketConnected()" />
       </mat-slider>
     </mat-card-actions>
   </mat-card-content>

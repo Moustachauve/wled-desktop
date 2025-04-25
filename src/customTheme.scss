@@ -1,0 +1,278 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+.device-theme {
+  --device-primary-0: #000000;
+  --device-primary-10: #191c1c;
+  --device-primary-20: #2e3131;
+  --device-primary-25: #393c3c;
+  --device-primary-30: #454748;
+  --device-primary-35: #505353;
+  --device-primary-40: #5c5f5f;
+  --device-primary-50: #757778;
+  --device-primary-60: #8f9191;
+  --device-primary-70: #aaabac;
+  --device-primary-80: #c5c7c7;
+  --device-primary-90: #e1e3e3;
+  --device-primary-95: #f0f1f1;
+  --device-primary-98: #f9f9fa;
+  --device-primary-99: #fbfcfc;
+  --device-primary-100: #ffffff;
+
+  --device-secondary-0: #000000;
+  --device-secondary-10: #001f24;
+  --device-secondary-20: #00363d;
+  --device-secondary-25: #00424a;
+  --device-secondary-30: #004f58;
+  --device-secondary-35: #005b66;
+  --device-secondary-40: #006874;
+  --device-secondary-50: #068391;
+  --device-secondary-60: #389eac;
+  --device-secondary-70: #58b9c7;
+  --device-secondary-80: #75d4e4;
+  --device-secondary-90: #98f0ff;
+  --device-secondary-95: #d0f8ff;
+  --device-secondary-98: #edfcff;
+  --device-secondary-99: #f6feff;
+  --device-secondary-100: #ffffff;
+
+  --device-neutral-0: #000000;
+  --device-neutral-10: #191c1c;
+  --device-neutral-20: #2e3131;
+  --device-neutral-25: #393c3c;
+  --device-neutral-30: #454748;
+  --device-neutral-35: #505353;
+  --device-neutral-40: #5c5f5f;
+  --device-neutral-50: #757778;
+  --device-neutral-60: #8f9191;
+  --device-neutral-70: #aaabac;
+  --device-neutral-80: #c5c7c7;
+  --device-neutral-90: #e1e3e3;
+  --device-neutral-95: #f0f1f1;
+  --device-neutral-98: #f9f9fa;
+  --device-neutral-99: #fbfcfc;
+  --device-neutral-100: #ffffff;
+
+  --device-neutral-0: #000000;
+  --device-neutral-4: #000c10;
+  --device-neutral-6: #001317;
+  --device-neutral-10: #001f27;
+  --device-neutral-12: #00242c;
+  --device-neutral-17: #002f39;
+  --device-neutral-20: #003641;
+  --device-neutral-22: #003b47;
+  --device-neutral-24: #00404c;
+  --device-neutral-25: #00424f;
+  --device-neutral-30: #004e5d;
+  --device-neutral-35: #005b6c;
+  --device-neutral-40: #00687b;
+  --device-neutral-50: #00829b;
+  --device-neutral-60: #009ebb;
+  --device-neutral-70: #30bad9;
+  --device-neutral-80: #57d6f6;
+  --device-neutral-87: #95e5fc;
+  --device-neutral-90: #afecff;
+  --device-neutral-92: #c0f0ff;
+  --device-neutral-94: #d1f3ff;
+  --device-neutral-95: #daf5ff;
+  --device-neutral-96: #e2f7ff;
+  --device-neutral-98: #f1fbff;
+  --device-neutral-99: #f8fdff;
+  --device-neutral-100: #ffffff;
+
+  --device-neutral-variant-0: #000000;
+  --device-neutral-variant-10: #161d1e;
+  --device-neutral-variant-20: #2b3233;
+  --device-neutral-variant-25: #363d3e;
+  --device-neutral-variant-30: #414849;
+  --device-neutral-variant-35: #4d5455;
+  --device-neutral-variant-40: #586061;
+  --device-neutral-variant-50: #71787a;
+  --device-neutral-variant-60: #8b9293;
+  --device-neutral-variant-70: #a5acae;
+  --device-neutral-variant-80: #c1c8c9;
+  --device-neutral-variant-90: #dde4e5;
+  --device-neutral-variant-95: #ebf2f3;
+  --device-neutral-variant-98: #f4fbfc;
+  --device-neutral-variant-99: #f7fdff;
+  --device-neutral-variant-100: #ffffff;
+
+  --device-error-0: #000000;
+  --device-error-10: #410002;
+  --device-error-20: #690005;
+  --device-error-25: #7e0007;
+  --device-error-30: #93000a;
+  --device-error-35: #a80710;
+  --device-error-40: #ba1a1a;
+  --device-error-50: #de3730;
+  --device-error-60: #ff5449;
+  --device-error-70: #ff897d;
+  --device-error-80: #ffb4ab;
+  --device-error-90: #ffdad6;
+  --device-error-95: #ffedea;
+  --device-error-98: #fff8f7;
+  --device-error-99: #fffbff;
+  --device-error-100: #ffffff;
+
+  --device-tertiary-0: #000000;
+  --device-tertiary-10: #410003;
+  --device-tertiary-20: #690007;
+  --device-tertiary-25: #7d000a;
+  --device-tertiary-30: #93000e;
+  --device-tertiary-35: #a60f16;
+  --device-tertiary-40: #b81f21;
+  --device-tertiary-50: #db3a36;
+  --device-tertiary-60: #ff544c;
+  --device-tertiary-70: #ff897f;
+  --device-tertiary-80: #ffb4ac;
+  --device-tertiary-90: #ffdad6;
+  --device-tertiary-95: #ffedea;
+  --device-tertiary-98: #fff8f7;
+  --device-tertiary-99: #fffbff;
+  --device-tertiary-100: #ffffff;
+}
+
+$_palettes: (
+  primary: (
+    0: var(--device-primary-0),
+    10: var(--device-primary-10),
+    20: var(--device-primary-20),
+    25: var(--device-primary-25),
+    30: var(--device-primary-30),
+    35: var(--device-primary-35),
+    40: var(--device-primary-40),
+    50: var(--device-primary-50),
+    60: var(--device-primary-60),
+    70: var(--device-primary-70),
+    80: var(--device-primary-80),
+    90: var(--device-primary-90),
+    95: var(--device-primary-95),
+    98: var(--device-primary-98),
+    99: var(--device-primary-99),
+    100: var(--device-primary-100),
+  ),
+  secondary: (
+    0: var(--device-secondary-0),
+    10: var(--device-secondary-10),
+    20: var(--device-secondary-20),
+    25: var(--device-secondary-25),
+    30: var(--device-secondary-30),
+    35: var(--device-secondary-35),
+    40: var(--device-secondary-40),
+    50: var(--device-secondary-50),
+    60: var(--device-secondary-60),
+    70: var(--device-secondary-70),
+    80: var(--device-secondary-80),
+    90: var(--device-secondary-90),
+    95: var(--device-secondary-95),
+    98: var(--device-secondary-98),
+    99: var(--device-secondary-99),
+    100: var(--device-secondary-100),
+  ),
+  neutral: (
+    0: var(--device-neutral-0),
+    4: var(--device-neutral-4),
+    6: var(--device-neutral-6),
+    10: var(--device-neutral-10),
+    12: var(--device-neutral-12),
+    17: var(--device-neutral-17),
+    20: var(--device-neutral-20),
+    22: var(--device-neutral-22),
+    24: var(--device-neutral-24),
+    25: var(--device-neutral-25),
+    30: var(--device-neutral-30),
+    35: var(--device-neutral-35),
+    40: var(--device-neutral-40),
+    50: var(--device-neutral-50),
+    60: var(--device-neutral-60),
+    70: var(--device-neutral-70),
+    80: var(--device-neutral-80),
+    87: var(--device-neutral-87),
+    90: var(--device-neutral-90),
+    92: var(--device-neutral-92),
+    94: var(--device-neutral-94),
+    95: var(--device-neutral-95),
+    96: var(--device-neutral-96),
+    98: var(--device-neutral-98),
+    99: var(--device-neutral-99),
+    100: var(--device-neutral-100),
+  ),
+  neutral-variant: (
+    0: var(--device-neutral-variant-0),
+    10: var(--device-neutral-variant-10),
+    20: var(--device-neutral-variant-20),
+    25: var(--device-neutral-variant-25),
+    30: var(--device-neutral-variant-30),
+    35: var(--device-neutral-variant-35),
+    40: var(--device-neutral-variant-40),
+    50: var(--device-neutral-variant-50),
+    60: var(--device-neutral-variant-60),
+    70: var(--device-neutral-variant-70),
+    80: var(--device-neutral-variant-80),
+    90: var(--device-neutral-variant-90),
+    95: var(--device-neutral-variant-95),
+    98: var(--device-neutral-variant-98),
+    99: var(--device-neutral-variant-99),
+    100: var(--device-neutral-variant-100),
+  ),
+  error: (
+    0: var(--device-error-0),
+    10: var(--device-error-10),
+    20: var(--device-error-20),
+    25: var(--device-error-25),
+    30: var(--device-error-30),
+    35: var(--device-error-35),
+    40: var(--device-error-40),
+    50: var(--device-error-50),
+    60: var(--device-error-60),
+    70: var(--device-error-70),
+    80: var(--device-error-80),
+    90: var(--device-error-90),
+    95: var(--device-error-95),
+    98: var(--device-error-98),
+    99: var(--device-error-99),
+    100: var(--device-error-100),
+  ),
+  tertiary: (
+    0: var(--device-tertiary-0),
+    10: var(--device-tertiary-10),
+    20: var(--device-tertiary-20),
+    25: var(--device-tertiary-25),
+    30: var(--device-tertiary-30),
+    35: var(--device-tertiary-35),
+    40: var(--device-tertiary-40),
+    50: var(--device-tertiary-50),
+    60: var(--device-tertiary-60),
+    70: var(--device-tertiary-70),
+    80: var(--device-tertiary-80),
+    90: var(--device-tertiary-90),
+    95: var(--device-tertiary-95),
+    98: var(--device-tertiary-98),
+    99: var(--device-tertiary-99),
+    100: var(--device-tertiary-100),
+  ),
+);
+
+$_rest: (
+  secondary: map.get($_palettes, secondary),
+  neutral: map.get($_palettes, neutral),
+  neutral-variant: map.get($_palettes, neutral-variant),
+  error: map.get($_palettes, error),
+);
+$_primary: map.merge(map.get($_palettes, primary), $_rest);
+$_tertiary: map.merge(map.get($_palettes, tertiary), $_rest);
+
+@mixin theme {
+  @include mat.theme(
+    (
+      color: (
+        primary: $_primary,
+        tertiary: $_tertiary,
+        theme-type: dark,
+      ),
+      density: 0,
+    )
+  );
+}
