@@ -1,4 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
+
+@use 'customTheme.scss' as customTheme;
+
 :root {
   color-scheme: dark;
 }
@@ -24,4 +27,8 @@ button,
 .mat-drawer-shown,
 input {
   -webkit-app-region: no-drag;
+}
+
+.device-theme {
+  @include customTheme.theme();
 }

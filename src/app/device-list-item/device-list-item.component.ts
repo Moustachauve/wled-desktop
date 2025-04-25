@@ -1,7 +1,8 @@
 import {
   Component,
   computed,
-  Input,
+  inject,
+  input,
   OnDestroy,
   OnInit,
   output,
@@ -18,6 +19,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 import { DeviceWithState } from '../../lib/websocket-client';
 import { DeviceInfoTwoRowsComponent } from '../device-info-two-rows/device-info-two-rows.component';
+import { DeviceThemeDirective } from '../device-theme.directive';
 import { DeviceWebsocketService } from '../device-websocket.service';
 
 @Component({
@@ -35,11 +37,19 @@ import { DeviceWebsocketService } from '../device-websocket.service';
   ],
   templateUrl: './device-list-item.component.html',
   styleUrl: './device-list-item.component.scss',
+  hostDirectives: [
+    {
+      directive: DeviceThemeDirective,
+      inputs: ['deviceWithState: deviceWithState'],
+    },
+  ],
 })
 export class DeviceListItemComponent implements OnInit, OnDestroy {
-  @Input() deviceWithState: DeviceWithState = {} as DeviceWithState;
-  @Input() isSelected = false;
-  @Input() showCheckbox = false;
+  private deviceWebsocketService = inject(DeviceWebsocketService);
+
+  deviceWithState = input.required<DeviceWithState>({});
+  isSelected = input(false);
+  showCheckbox = input(false);
   deviceChecked = output<boolean>();
 
   brightness = 0;
@@ -47,18 +57,16 @@ export class DeviceListItemComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   connectionClass = computed(() => {
-    return this.deviceWithState.isWebsocketConnected()
+    return this.deviceWithState().isWebsocketConnected()
       ? 'connected'
       : 'disconnected';
   });
 
   connectionTooltip = computed(() => {
-    return this.deviceWithState.isWebsocketConnected()
+    return this.deviceWithState().isWebsocketConnected()
       ? 'Connected to device'
       : 'Not connected to device';
   });
-
-  constructor(private deviceWebsocketService: DeviceWebsocketService) {}
 
   ngOnInit(): void {
     this.brightnessSubject
@@ -66,10 +74,11 @@ export class DeviceListItemComponent implements OnInit, OnDestroy {
       .subscribe(brightness => {
         this.deviceWebsocketService.setBrightness(
           brightness,
-          this.deviceWithState.device.macAddress
+          this.deviceWithState().device.macAddress
         );
       });
   }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
@@ -79,7 +88,7 @@ export class DeviceListItemComponent implements OnInit, OnDestroy {
     console.log('toggleSwitch:', isChecked);
     this.deviceWebsocketService.togglePower(
       isChecked,
-      this.deviceWithState.device.macAddress
+      this.deviceWithState().device.macAddress
     );
   }
 
