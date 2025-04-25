@@ -1,4 +1,11 @@
-import { Directive, effect, HostBinding, input } from '@angular/core';
+import {
+  computed,
+  Directive,
+  effect,
+  HostBinding,
+  input,
+  Signal,
+} from '@angular/core';
 import {
   argbFromHex,
   Hct,
@@ -21,6 +28,11 @@ interface colorsFromPaletteConfig {
   neutral: { hex: string; tone: number }[];
   'neutral-variant': { hex: string; tone: number }[]; // Use quotes for kebab-case key
   error: { hex: string; tone: number }[];
+}
+
+interface ThemeInputState {
+  hexColor: string;
+  isDeviceOnline: boolean;
 }
 
 /**
@@ -61,27 +73,48 @@ export class DeviceThemeDirective {
   @HostBinding('class')
   elementClass = 'device-theme';
 
-  constructor() {
-    // Use an effect to reactively update the theme whenever the device state changes.
-    effect(() => {
-      // Read the inner signal containing the device's state information.
-      // This is the primary signal the effect tracks for changes.
+  /**
+   * A computed signal that derives the essential state needed for theme generation
+   * from the `deviceWithState` input. It extracts the primary hex color from the
+   * first segment and the device's online status.
+   *
+   * This signal uses a custom equality function (`themeInputStateEquals`) to ensure
+   * that the downstream `effect` only runs when either the calculated `hexColor`
+   * or the `isDeviceOnline` status actually changes, optimizing performance by
+   * preventing unnecessary theme recalculations.
+   */
+  private themeInputState: Signal<ThemeInputState> = computed(
+    () => {
       const stateInfo = this.deviceWithState().stateInfo();
+      const isDeviceOnline = this.deviceWithState().isWebsocketConnected();
 
       // Extract the color array from the first segment of the device state.
-      // WLED state stores colors as [R, G, B] arrays.
       const colors = stateInfo?.state?.segment?.[0]?.colors;
       let hexColor = '#ffffff'; // Default to white
 
       // Colors can sometime have 4 values: RGB(W), white being optional. We
       // ignore the white value to calculate the theme color.
       if (colors && colors.length > 0 && colors[0].length >= 3) {
-        hexColor = this.rgbToHex(colors[0][0], colors[0][1], colors[0][2]);
+        // Ensure values are within valid range (0-255) before converting
+        const r = Math.max(0, Math.min(255, colors[0][0]));
+        const g = Math.max(0, Math.min(255, colors[0][1]));
+        const b = Math.max(0, Math.min(255, colors[0][2]));
+        hexColor = this.rgbToHex(r, g, b);
       }
-      this.themeFromSelectedColor(
-        hexColor,
-        this.deviceWithState().isWebsocketConnected()
-      );
+
+      return { hexColor, isDeviceOnline };
+    },
+    // Pass the options object with the custom equality function
+    { equal: this.themeInputStateEquals } // <-- Add this option
+  );
+
+  constructor() {
+    // Use an effect to reactively update the theme whenever the device state changes.
+    effect(() => {
+      // Read the computed state
+      const { hexColor, isDeviceOnline } = this.themeInputState();
+      // Generate the theme based on the derived state
+      this.themeFromSelectedColor(hexColor, isDeviceOnline);
     });
   }
 
@@ -191,5 +224,22 @@ export class DeviceThemeDirective {
       this.componentToHex(g) +
       this.componentToHex(b)
     );
+  }
+
+  /**
+   * Equality function for the `themeInputState` computed signal.
+   * Optimizes theme updates by comparing only the values. Prevents the effect
+   * from running if these specific values haven't changed.
+   *
+   * @param a Previous `ThemeInputState`.
+   * @param b Current `ThemeInputState`.
+   * @returns `true` if `hexColor` and `isDeviceOnline` are identical.
+   */
+  private themeInputStateEquals(
+    a: ThemeInputState,
+    b: ThemeInputState
+  ): boolean {
+    // Return true if both color and online status are the same
+    return a.hexColor === b.hexColor && a.isDeviceOnline === b.isDeviceOnline;
   }
 }
