@@ -95,7 +95,7 @@ export class DeviceListComponent {
     if (devicesToDelete.length === 0) return;
 
     const dialogRef = this.dialog.open(DialogDeviceDeleteComponent, {
-      data: this.checkedDevices,
+      data: devicesToDelete,
     });
 
     dialogRef.afterClosed().subscribe(result => {
