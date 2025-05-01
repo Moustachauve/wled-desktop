@@ -1,0 +1,22 @@
+<h2 mat-dialog-title>This page does not not work on HTTPS</h2>
+<mat-dialog-content>
+  <p>
+    For legitimate safety reasons, modern browsers don't allow websites from an
+    encrypted request to make unencrypted requests. WLED devices are limited to
+    unencrypted requests.
+  </p>
+  <p>You can do one of the following:</p>
+  <ol>
+    <li>
+      Open this page in
+      <a href="#" (click)="openUnencryptedPage()">Unencrypted mode</a> (HTTP)
+    </li>
+    <li>Download the Desktop app (Coming soon!).</li>
+    <li>Access the devices directly by address.</li>
+  </ol>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="openUnencryptedPage()">
+    Open Unencrypted Page (HTTP)
+  </button>
+</mat-dialog-actions>
