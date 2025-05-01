@@ -1,0 +1,37 @@
+{
+  "appId": "ca.cgagnier.wleddesktop",
+  "asar": true,
+  "directories": {
+    "output": "dist/electron/",
+    "buildResources": "resources"
+  },
+  "files": [
+    "**/*",
+    "!**/*.ts",
+    "!*.map",
+    "!package.json",
+    "!package-lock.json",
+    {
+      "from": "../dist/wled-desktop",
+      "filter": ["**/*"]
+    }
+  ],
+  "win": {
+    "icon": "dist/wled-desktop/browser/favico.ico",
+    "target": ["nsis", "appx"]
+  },
+  "mac": {
+    "icon": "dist/wled-desktop/browser/favico.icns",
+    "target": ["dmg"]
+  },
+  "appx": {
+    "identityName": "61266cgagnier.WLED",
+    "publisher": "CN=6EC53338-0C1E-417F-88E8-2FD860B1FFE5",
+    "applicationId": "ca.cgagnier.wleddesktop",
+    "displayName": "WLED",
+    "publisherDisplayName": "cgagnier"
+  },
+  "nsis": {
+    "installerIcon": "favicon.ico"
+  }
+}
