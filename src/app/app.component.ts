@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { RouterOutlet } from '@angular/router';
 import { DeviceFirstContactService } from './device-first-contact.service';
+import { DialogHttpsWarningComponent } from './dialog-https-warning/dialog-https-warning.component';
 import { NavigationComponent } from './navigation/navigation.component';
 
 declare global {
@@ -17,8 +19,25 @@ declare global {
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'WLED';
 
-  constructor(private deviceFirstContactService: DeviceFirstContactService) {}
+  readonly dialog = inject(MatDialog);
+  private deviceFirstContactService = inject(DeviceFirstContactService);
+
+  ngOnInit(): void {
+    this.checkForHttps();
+  }
+
+  // Check if the user is on HTTPs. Will be used to display a warning if they
+  // are. If the user is on electron, do nothing.
+  checkForHttps() {
+    if (window.electron || window.location.protocol !== 'https:') {
+      return;
+    }
+
+    this.dialog.open(DialogHttpsWarningComponent, {
+      disableClose: true,
+    });
+  }
 }
