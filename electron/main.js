@@ -1,5 +1,6 @@
 import { Bonjour } from 'bonjour-service';
 import { app, BrowserWindow, ipcMain, shell } from 'electron';
+import isDev from 'electron-is-dev';
 import os from 'os';
 import path from 'path';
 import url, { fileURLToPath } from 'url';
@@ -36,7 +37,12 @@ function createWindow() {
     },
   });
   win.removeMenu();
-  win.webContents.openDevTools();
+
+  // Only show dev tools when running in dev mode :)
+  if (isDev) {
+    win.webContents.openDevTools();
+  }
+
   win.loadFile(
     url.format({
       pathname: `../dist/wled-desktop/browser/index.html`,
