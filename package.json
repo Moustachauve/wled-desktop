@@ -38,6 +38,7 @@
     "bonjour-service": "^1.3.0",
     "class-transformer": "^0.5.1",
     "dexie": "^4.0.11",
+    "electron-debug": "^4.1.0",
     "electron-is-dev": "^3.0.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "~7.8.0",
