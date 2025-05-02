@@ -1,9 +1,10 @@
 import { Bonjour } from 'bonjour-service';
 import { app, BrowserWindow, ipcMain, shell } from 'electron';
+import debug from 'electron-debug';
 import isDev from 'electron-is-dev';
 import os from 'os';
 import path from 'path';
-import url, { fileURLToPath } from 'url';
+import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -11,6 +12,10 @@ const __dirname = path.dirname(__filename);
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
+
+// Enables debug tools, even in production, so users can look at the logs if
+// needed.
+debug({ isEnabled: true });
 
 // Error Handling
 process.on('uncaughtException', error => {
@@ -43,13 +48,7 @@ function createWindow() {
     win.webContents.openDevTools();
   }
 
-  win.loadFile(
-    url.format({
-      pathname: `../dist/wled-desktop/browser/index.html`,
-      protocol: 'file:',
-      slashes: true,
-    })
-  );
+  win.loadFile(path.join(__dirname, '../dist/wled-desktop/browser/index.html'));
 
   // This is to make sure links with target "_blank" open in the external
   // browser.

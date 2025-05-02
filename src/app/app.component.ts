@@ -1,9 +1,8 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { RouterOutlet } from '@angular/router';
 import { DeviceFirstContactService } from './device-first-contact.service';
 import { DialogHttpsWarningComponent } from './dialog-https-warning/dialog-https-warning.component';
-import { NavigationComponent } from './navigation/navigation.component';
 
 declare global {
   interface Window {
@@ -15,7 +14,7 @@ declare global {
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NavigationComponent],
+  imports: [RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
